@@ -36,6 +36,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IMunicipioSqlReadAdapter, MunicipioSqlReadAdapter>();
             services.AddScoped<ITipoTelefoneSqlReadAdapter, TipoTelefoneSqlReadAdapter>();
             services.AddScoped<ITurnoSqlReadAdapter, TurnoSqlReadAdapter>();
+            services.AddScoped<ICuidadorSqlReadAdapter, CuidadorSqlReadAdapter>();
 
             return services;
         }

@@ -18,6 +18,7 @@ namespace DevFM.Application.Microsoft.Extensions.DependencyInjection
             }
 
             services.AddScoped<ICategoriaService, CategoriaService>();
+            services.AddScoped<ICuidadorService, CuidadorService>();
             services.AddScoped<IEstadoCivilService, EstadoCivilService>();
             services.AddScoped<IEstadoService, EstadoService>();
             services.AddScoped<IMunicipioService, MunicipioService>();
