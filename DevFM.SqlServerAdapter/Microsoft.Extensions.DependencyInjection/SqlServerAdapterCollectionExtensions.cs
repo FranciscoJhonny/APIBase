@@ -37,6 +37,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<ITipoTelefoneSqlReadAdapter, TipoTelefoneSqlReadAdapter>();
             services.AddScoped<ITurnoSqlReadAdapter, TurnoSqlReadAdapter>();
             services.AddScoped<ICuidadorSqlReadAdapter, CuidadorSqlReadAdapter>();
+            services.AddScoped<IPacienteSqlReadAdapter, PacienteSqlReadAdapter>();
 
             return services;
         }

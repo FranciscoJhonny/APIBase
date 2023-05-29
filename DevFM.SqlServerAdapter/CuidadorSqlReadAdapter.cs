@@ -71,12 +71,12 @@ namespace DevFM.SqlServerAdapter
                                                VALUES  ( @NumeroTelefone ,
                                                          @TipoTelefoneId ,
                                                          GETDATE() , 
-                                                         GETDATE());";
+                                                         GETDATE())";
 
                 int telefoneId = await _connection.ExecuteScalarAsync<int>(sql_telefone, item, commandType: CommandType.Text);
 
 
-                const string sql_cuidadro_telefone = @"INSERT dbo.Cuidador_Telefones
+                const string sql_cuidador_telefone = @"INSERT dbo.Cuidador_Telefones
                                                                     ( CuidadorId ,
                                                                       TelefoneId ,
                                                                       DataCriacao ,
@@ -87,7 +87,7 @@ namespace DevFM.SqlServerAdapter
                                                                       GETDATE() ,
                                                                       GETDATE())";
 
-                await _connection.ExecuteScalarAsync<int>(sql_cuidadro_telefone, new { cuidadorId, telefoneId }, commandType: CommandType.Text);
+                await _connection.ExecuteScalarAsync<int>(sql_cuidador_telefone, new { cuidadorId, telefoneId }, commandType: CommandType.Text);
 
             }
             return cuidadorId;

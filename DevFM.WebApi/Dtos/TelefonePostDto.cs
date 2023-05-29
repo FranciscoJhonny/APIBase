@@ -2,7 +2,7 @@
 {
     public class TelefonePostDto
     {
-        public string NumeroTelefone { get; set; } = string.Empty;
+        public string NumeroTelefone { get; set; }
         public int TipoTelefoneId { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace DevFM.WebApi.Dtos
 {
-    public class AtendimentoPostDto
+    public class AtendimentoDto
     {
         public int CuidadorId { get; set; }
         public int TurnoId { get; set; }

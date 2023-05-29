@@ -13,6 +13,8 @@ namespace DevFM.Domain.Models
         public int CategoriaId { get; set; }
         public DateTime DataAlteracao { get; set; }
         public bool Ativo { get; set; }
+        public Categoria Categoria { get; set; } = new Categoria();
         public IEnumerable<Telefone> TelefonesCuidador {  get; set; } = Enumerable.Empty<Telefone>();
+        public IEnumerable<Atendimento> AtendimentosCuidador { get; set; } = Enumerable.Empty<Atendimento>();
     }
 }

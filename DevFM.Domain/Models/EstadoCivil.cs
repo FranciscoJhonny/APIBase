@@ -3,7 +3,7 @@
     public class EstadoCivil
     {
         public int EstadoCivilId { get; set; }
-        public string DescricaoEstadoCivil { get; set; }
+        public string DescricaoEstadoCivil { get; set; } = string.Empty;    
         public DateTime DataCriacao { get; set; }
         public DateTime DataAlteracao { get; set; }
         public bool Ativo { get; set; }
