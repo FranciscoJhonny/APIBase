@@ -238,7 +238,41 @@ namespace DevFM.SqlServerAdapter
                                                                    ,GETDATE()
                                                                    ,1)";
 
-                int telefoneId = await _connection.ExecuteScalarAsync<int>(sql_atendimento, atendimento, commandType: CommandType.Text);
+                await _connection.ExecuteScalarAsync<int>(sql_atendimento, atendimento, commandType: CommandType.Text);
+            }
+            foreach (var paciente_Pacote in paciente.Paciente_Pacotes)
+            {
+                paciente_Pacote.PacienteId = pacienteId;
+                const string sql_paciente_pacote = @"INSERT INTO [dbo].[Paciente_Pacotes]
+                                                                       ([PacienteId]
+                                                                       ,[PacoteId]
+                                                                       ,[PacoteMensal]
+                                                                       ,[DiaPlantao]
+                                                                       ,[ValorPacote]
+                                                                       ,[SalarioCuidador]
+                                                                       ,[SalarioDiaCuidador]
+                                                                       ,[ValorPlataoCuidador]
+                                                                       ,[ValorDesconto]
+                                                                       ,[TaxaAdminstrativa]
+                                                                       ,[DataCriacao]
+                                                                       ,[DataAlteracao]
+                                                                       ,[Ativo])
+                                                                 VALUES
+                                                                       (@PacienteId
+                                                                       ,@PacoteId
+                                                                       ,@PacoteMensal
+                                                                       ,@DiaPlantao
+                                                                       ,@ValorPacote
+                                                                       ,@SalarioCuidador
+                                                                       ,@SalarioDiaCuidador
+                                                                       ,@ValorPlataoCuidador
+                                                                       ,@ValorDesconto
+                                                                       ,@TaxaAdminstrativa
+                                                                       ,GETDATE()
+                                                                       ,GETDATE()
+                                                                       ,1)";
+
+                await _connection.ExecuteScalarAsync<int>(sql_paciente_pacote, paciente_Pacote, commandType: CommandType.Text);
             }
 
             return pacienteId;

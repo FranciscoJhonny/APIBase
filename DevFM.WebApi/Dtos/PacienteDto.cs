@@ -12,10 +12,11 @@
         public string Observaçao { get; set; } = string.Empty;
         public string Particulariedade { get; set; } = string.Empty;
         public string Jornada { get; set; } = string.Empty;
-        public IEnumerable<TelefoneDto> TelefonesPaciente { get; set; }
-        public IEnumerable<EnderecoDto> EnderecosPaciente { get; set; } 
-        public IEnumerable<ResponsavelDto> ResponsaveisPaciente { get; set; }
-        public IEnumerable<AtendimentoDto> AtendimentosPaciente { get; set; }
+        public IEnumerable<TelefoneDto> TelefonesPacienteDtos { get; set; }
+        public IEnumerable<EnderecoDto> EnderecosPacienteDtos { get; set; } 
+        public IEnumerable<ResponsavelDto> ResponsaveisPacienteDtos { get; set; }
+        public IEnumerable<AtendimentoDto> AtendimentosPacienteDtos { get; set; }
+        public IEnumerable<Paciente_PacoteDto> Paciente_PacoteDtos { get; set; }
     }
 }
 
