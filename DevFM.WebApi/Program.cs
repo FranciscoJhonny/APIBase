@@ -26,7 +26,8 @@ builder.Services.AddApplicationService();
 
 builder.Services.AddSingleton<SqlServerAdapterConfiguration>();
 var configura = new SqlServerAdapterConfiguration();
-configura.SqlConnectionString = "Data Source=MILTEC0494\\LOCALSQL;Initial Catalog=BD_Base;Integrated Security=True";
+configura.SqlConnectionString = "workstation id=dbcuidador.mssql.somee.com;packet size=4096;user id=fmaia_SQLLogin_1;pwd=7mb1dfxdyf;data source=dbcuidador.mssql.somee.com;persist security info=False;initial catalog=dbcuidador";
+//configura.SqlConnectionString = "Data Source=MILTEC0494\\LOCALSQL;Initial Catalog=BD_Base;Integrated Security=True";
 builder.Services.AddSqlServerAdapter(configura);
 builder.Services.AddHealthChecks();
 
