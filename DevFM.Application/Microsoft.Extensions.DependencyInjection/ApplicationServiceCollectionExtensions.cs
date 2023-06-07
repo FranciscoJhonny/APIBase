@@ -26,6 +26,7 @@ namespace DevFM.Application.Microsoft.Extensions.DependencyInjection
             services.AddScoped<ITurnoService, TurnoService>();
             services.AddScoped<IPacienteService, PacienteService>();
             services.AddScoped<IPacoteService, PacoteService>();
+            services.AddScoped<IUsuarioService, UsuarioService>();
 
 
             return services;
