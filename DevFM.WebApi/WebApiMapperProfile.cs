@@ -59,6 +59,12 @@ namespace DevFM.WebApi
                .ForMember(o => o.TelefonesResponsaveis, m => m.MapFrom(x => x.TelefonesResponsavel)).ReverseMap();
             CreateMap<AtendimentoDto, Atendimento>().ReverseMap();
 
+            CreateMap<UsuarioPostDto, Usuario>().ReverseMap();
+            CreateMap<UsuarioDto, Usuario>().ReverseMap();
+            CreateMap<PerfilDto, Perfil>().ReverseMap();
+            CreateMap<PerfilPostDto, Perfil>().ReverseMap();
+
         }
     }
 }
+
