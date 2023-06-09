@@ -8,5 +8,6 @@ namespace DevFM.Domain.Adapters
         Task<Usuario> ObterUsuarioPorIdAsync(int UsuarioId);
         Task<int> NewUsuarioAsync(Usuario Usuario);
 
+        Task<Usuario> ObterPorUsuarioSenhaAsync(string login, string senha);
     }
 }

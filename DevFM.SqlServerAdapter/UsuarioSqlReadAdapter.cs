@@ -79,5 +79,23 @@ namespace DevFM.SqlServerAdapter
 
             return await _connection.ExecuteScalarAsync<int>(sql, Usuario, commandType: CommandType.Text); ;
         }
+
+        public async Task<Usuario> ObterPorUsuarioSenhaAsync(string login, string senha)
+        {
+            const string sql = @"SELECT UsuarioId ,
+                                        Nome ,
+                                        Email ,
+                                        PerfilId ,
+                                        Ativo ,
+                                        DataInclusao ,
+                                        DataOperacao ,
+                                        Senha ,
+                                        TokenRecuperacaoSenha ,
+                                        DataRecuperacaoSenha FROM usuario
+	                                    WHERE Email = @login
+	                                    AND Senha = @senha";
+
+            return await _connection.QueryFirstOrDefaultAsync<Usuario>(sql, new { login, senha }, commandType: CommandType.Text);
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DevFM.Application.Services;
 using DevFM.Domain.Models;
 using DevFM.Domain.Services;
 using DevFM.WebApi.Dtos;
@@ -14,7 +15,7 @@ namespace DevFM.WebApi.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
-        private readonly IUsuarioService _UsuarioService;
+        private readonly IUsuarioService _usuarioService;
 
         public UsuarioController(IMapper mapper,
             IUsuarioService UsuarioService,
@@ -22,7 +23,7 @@ namespace DevFM.WebApi.Controllers
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _logger = loggerFactory?.CreateLogger<UsuarioController>() ?? throw new ArgumentNullException(nameof(loggerFactory));
-            _UsuarioService = UsuarioService ?? throw new ArgumentNullException(nameof(UsuarioService));
+            _usuarioService = UsuarioService ?? throw new ArgumentNullException(nameof(UsuarioService));
         }
         [HttpGet("get-lista-usuario")]
         [ProducesResponseType(typeof(UsuarioDto), StatusCodes.Status200OK)]
@@ -32,7 +33,7 @@ namespace DevFM.WebApi.Controllers
         {
             try
             {
-                var usuario = await _UsuarioService.ObterUsuarioAsync();
+                var usuario = await _usuarioService.ObterUsuarioAsync();
 
                 var response = _mapper.Map<IEnumerable<UsuarioDto>>(usuario);
 
@@ -56,7 +57,7 @@ namespace DevFM.WebApi.Controllers
         {
             try
             {
-                var usuario = await _UsuarioService.ObterUsuarioPorIdAsync(usuarioId);
+                var usuario = await _usuarioService.ObterUsuarioPorIdAsync(usuarioId);
 
                 var response = _mapper.Map<UsuarioDto>(usuario);
 
@@ -83,9 +84,33 @@ namespace DevFM.WebApi.Controllers
 
             var usuario = _mapper.Map<Usuario>(usuarioDto);
 
-            var usuarioId = await _UsuarioService.NewUsuarioAsync(usuario);
+            var usuarioId = await _usuarioService.NewUsuarioAsync(usuario);
 
             return CreatedAtAction(nameof(GetUsuarioPorIdAsync), new { usuarioId }, usuarioId);
+
+        }
+
+        /// <summary>
+        /// Efetua o login do usuário no MSAlfabetiza
+        /// </summary>
+        /// <param name="loginUsuario">Parametro do aluno</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        [HttpPost("login")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType( StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> PostLogin([FromBody] LoginUsuarioDto loginUsuario)
+        {
+            if (loginUsuario is null)
+                throw new ArgumentNullException(nameof(loginUsuario));
+
+            var msUsuario = await _usuarioService.LoginUsuario(loginUsuario.Usuario, loginUsuario.Senha);
+
+            if (msUsuario == null)
+                return NotFound();
+
+            return Ok(msUsuario);
 
         }
     }

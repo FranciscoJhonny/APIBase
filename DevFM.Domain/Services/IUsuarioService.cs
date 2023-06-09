@@ -1,4 +1,5 @@
 ﻿using DevFM.Domain.Models;
+using DevFM.Domain.ViewModels;
 
 namespace DevFM.Domain.Services
 {
@@ -7,5 +8,6 @@ namespace DevFM.Domain.Services
         Task<IEnumerable<Usuario>> ObterUsuarioAsync();
         Task<Usuario> ObterUsuarioPorIdAsync(int usuarioId);
         Task<int> NewUsuarioAsync(Usuario usuario);
+        Task<UsuarioLogadoVM> LoginUsuario(string login, string senha);
     }
 }
