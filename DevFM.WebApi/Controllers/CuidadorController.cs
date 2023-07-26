@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DevFM.Application.Services;
 using DevFM.Domain.Models;
 using DevFM.Domain.Services;
 using DevFM.WebApi.Dtos;
@@ -24,7 +25,7 @@ namespace DevFM.WebApi.Controllers
             _logger = loggerFactory?.CreateLogger<CuidadorController>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _cuidadorService = cuidadorService ?? throw new ArgumentNullException(nameof(cuidadorService));
         }
-        [HttpGet("get-lista-cuidador")]
+        [HttpGet("cuidador/get-lista-cuidador")]
         [ProducesResponseType(typeof(CuidadorDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -33,8 +34,15 @@ namespace DevFM.WebApi.Controllers
             try
             {
                 var Cuidador = await _cuidadorService.ObterCuidadorAsync();
+                var listaCuidadorDTO = _mapper.Map<IEnumerable<CuidadorDto>>(Cuidador);
 
-                var response = _mapper.Map<IEnumerable<CuidadorDto>>(Cuidador);
+                foreach (var item in listaCuidadorDTO)
+                {
+                    var listaTelefonesCuidador = await _cuidadorService.ObterTelefonesCuidadorAsync(item.CuidadorId);
+                    item.TelefonesCuidador = _mapper.Map<IEnumerable<TelefoneDto>>(listaTelefonesCuidador);
+                }
+
+                var response = listaCuidadorDTO;
 
                 if (response == null)
                     return NotFound();
@@ -47,7 +55,7 @@ namespace DevFM.WebApi.Controllers
                 throw ex;
             }
         }
-        [HttpGet("get-cuidador/cuidadorId")]
+        [HttpGet("cuidador/get-cuidador/{cuidadorId}")]
         [ActionName(nameof(GetCuidadorPorIdAsync))]
         [ProducesResponseType(typeof(CuidadorDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -60,8 +68,13 @@ namespace DevFM.WebApi.Controllers
 
                 var response = _mapper.Map<CuidadorDto>(Cuidador);
 
+              
+
                 if (response == null)
                     return NotFound();
+
+                var listaTelefonesCuidador = await _cuidadorService.ObterTelefonesCuidadorAsync(response.CuidadorId);
+                response.TelefonesCuidador = _mapper.Map<IEnumerable<TelefoneDto>>(listaTelefonesCuidador);
 
                 return Ok(response);
             }
@@ -72,7 +85,7 @@ namespace DevFM.WebApi.Controllers
             }
         }
 
-        [HttpPost("post-cuidador")]        
+        [HttpPost("cuidador/post-cuidador")]        
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType( StatusCodes.Status500InternalServerError)]
@@ -87,6 +100,28 @@ namespace DevFM.WebApi.Controllers
 
             return CreatedAtAction(nameof(GetCuidadorPorIdAsync), new { cuidadorId }, cuidadorId);
 
+        }
+
+        /// <summary>
+        /// Editar cuidador
+        /// </summary>
+        /// <param name="cuidadorDto">Parametro do cuidador</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        [HttpPut("cuidador/put-cuidador")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> PutCuidador([FromBody] CuidadorPutDto cuidadorDto)
+        {
+            if (cuidadorDto is null)
+                throw new ArgumentNullException(nameof(cuidadorDto));
+
+            var cuidador = _mapper.Map<Cuidador>(cuidadorDto);
+
+            await _cuidadorService.UpdateCuidador(cuidador);
+
+            return Ok();
         }
     }
 }

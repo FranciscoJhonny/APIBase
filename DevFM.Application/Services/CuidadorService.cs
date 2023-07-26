@@ -1,6 +1,7 @@
 ﻿using DevFM.Domain.Adapters;
 using DevFM.Domain.Models;
 using DevFM.Domain.Services;
+using DevFM.Domain.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,26 +12,35 @@ namespace DevFM.Application.Services
 {
     public class CuidadorService : ICuidadorService
     {
-        private readonly ICuidadorSqlReadAdapter _CuidadorSqlAdapter;
+        private readonly ICuidadorSqlReadAdapter _cuidadorSqlAdapter;
 
         public CuidadorService(ICuidadorSqlReadAdapter CuidadorSqlAdapter)
         {
-            _CuidadorSqlAdapter = CuidadorSqlAdapter;
+            _cuidadorSqlAdapter = CuidadorSqlAdapter;
         }
 
         public async Task<IEnumerable<Cuidador>> ObterCuidadorAsync()
         {
-            return await _CuidadorSqlAdapter.ObterCuidadorAsync();
+            return await _cuidadorSqlAdapter.ObterCuidadorAsync();
         }
 
         public async Task<Cuidador> ObterCuidadorPorIdAsync(int CuidadorId)
         {
-            return await _CuidadorSqlAdapter.ObterCuidadorPorIdAsync(CuidadorId);
+            return await _cuidadorSqlAdapter.ObterCuidadorPorIdAsync(CuidadorId);
         }
 
         public async Task<int> NewCuidadorAsync(Cuidador cuidador)
         {
-            return await _CuidadorSqlAdapter.NewCuidadorAsync(cuidador);
+            return await _cuidadorSqlAdapter.NewCuidadorAsync(cuidador);
+        }
+
+        public async Task<IEnumerable<Telefone>> ObterTelefonesCuidadorAsync(int cuidadorId)
+        {
+            return await _cuidadorSqlAdapter.ObterTelefonesCuidadorAsync(cuidadorId);
+        }
+        public async Task<int> UpdateCuidador(Cuidador cuidador)
+        {
+            return await _cuidadorSqlAdapter.UpdateCuidador(cuidador);
         }
 
     }

@@ -14,8 +14,8 @@ namespace DevFM.Domain.Models
         public DateTime DataNascimento { get; set; }
         public DateTime DataInicio { get; set; }
         public DateTime? DataRenovacao { get; set; } 
-        public string DecricaoPaciente { get; set; } = string.Empty;
-        public string Observaçao { get; set; } = string.Empty;
+        public string DescricaoPaciente { get; set; } = string.Empty;
+        public string Observacao { get; set; } = string.Empty;
         public string Particulariedade { get; set; } = string.Empty;
         public string Jornada { get; set; } = string.Empty;
         public DateTime DataCriacao { get; set; }

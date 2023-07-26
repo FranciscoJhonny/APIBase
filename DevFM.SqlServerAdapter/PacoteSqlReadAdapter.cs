@@ -24,20 +24,21 @@ namespace DevFM.SqlServerAdapter
         public async Task<IEnumerable<Pacote>> ObterPacoteAsync()
         {
             const string sql = @"SELECT [PacoteId]
-                                        ,[Descricao_Pacote]
-                                        ,[Valor_Pacote]
+                                        ,[Descricao_Pacote] as [DescricaoPacote]
+                                        ,[Valor_Pacote] as [ValorPacote]
                                         ,[DataCriacao]
                                         ,[DataAlteracao]
                                         ,[Ativo]
-                                    FROM [dbo].[Pacotes]";
+                                    FROM [dbo].[Pacotes]
+                                 ORDER BY DescricaoPacote";
 
             return await _connection.QueryAsync<Pacote>(sql, commandType: CommandType.Text);
         }
         public async Task<Pacote> ObterPacotePorIdAsync(int pacoteId)
         {
             const string sql = @"SELECT [PacoteId]
-                                        ,[Descricao_Pacote]
-                                        ,[Valor_Pacote]
+                                       ,[Descricao_Pacote] as [DescricaoPacote]
+                                        ,[Valor_Pacote] as [ValorPacote]
                                         ,[DataCriacao]
                                         ,[DataAlteracao]
                                         ,[Ativo]

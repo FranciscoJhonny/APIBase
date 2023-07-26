@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DevFM.Domain.Models;
+using DevFM.Domain.ViewModels;
 using DevFM.WebApi.Dtos;
 using System;
 
@@ -19,9 +20,12 @@ namespace DevFM.WebApi
             CreateMap<MunicipioDto, Municipio>().ReverseMap();
             CreateMap<TipoTelefoneDto, TipoTelefone>().ReverseMap();
             CreateMap<TurnoDto, Turno>().ReverseMap();
-
+            CreateMap<TelefoneDto, TelefoneVM>().ReverseMap();
             //CreateMap<PacientePostDto, Paciente>().ReverseMap();
             CreateMap<PacienteDto, Paciente>().ReverseMap();
+
+            CreateMap<CuidadorDto, Cuidador>()
+              .ForMember(o => o.TelefonesCuidador, m => m.MapFrom(x => x.TelefonesCuidador)).ReverseMap();
 
             CreateMap<PacienteDto, Paciente>()
               .ForMember(o => o.RespensaveisPacientes, m => m.MapFrom(x => x.ResponsaveisPacienteDtos))
@@ -46,6 +50,9 @@ namespace DevFM.WebApi
 
             CreateMap<CuidadorPostDto, Cuidador>().ReverseMap();
             CreateMap<TelefonePostDto, Telefone>().ReverseMap();
+
+            CreateMap<CuidadorPutDto, Cuidador>().ReverseMap();
+            CreateMap<TelefonePutDto, Telefone>().ReverseMap();
 
             CreateMap<EnderecoPostDto, Endereco>().ReverseMap();
             CreateMap<ResponsavelPostDto, Responsavel>().ReverseMap();

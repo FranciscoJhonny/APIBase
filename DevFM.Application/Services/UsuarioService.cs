@@ -54,6 +54,7 @@ namespace DevFM.Application.Services
             {
                 UsuarioId = usuario.UsuarioId,
                 Nome = usuario.Nome,
+                Email = usuario.Email,
                 PerfilId = usuario.PerfilId
             };
 

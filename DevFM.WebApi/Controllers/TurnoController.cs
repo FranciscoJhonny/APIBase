@@ -23,7 +23,7 @@ namespace DevFM.WebApi.Controllers
             _logger = loggerFactory?.CreateLogger<TurnoController>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _turnoService = turnoService ?? throw new ArgumentNullException(nameof(turnoService));
         }
-        [HttpGet("get-lista-turno")]
+        [HttpGet("turno/get-lista-turno")]
         [ProducesResponseType(typeof(TurnoDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

@@ -29,7 +29,7 @@ namespace DevFM.SqlServerAdapter
                                         ,[DataNascimento]
                                         ,[DataInicio]
                                         ,[DataRenovacao]
-                                        ,[DecricaoPaciente]
+                                        ,[DescricaoPaciente]
                                         ,[Observaçao]
                                         ,[Particulariedade]
                                         ,[Jornada]
@@ -48,7 +48,7 @@ namespace DevFM.SqlServerAdapter
                                         ,[DataNascimento]
                                         ,[DataInicio]
                                         ,[DataRenovacao]
-                                        ,[DecricaoPaciente]
+                                        ,[DescricaoPaciente]
                                         ,[Observaçao]
                                         ,[Particulariedade]
                                         ,[Jornada]
@@ -64,13 +64,12 @@ namespace DevFM.SqlServerAdapter
         public async Task<int> NewPacienteAsync(Paciente paciente)
         {
             const string sql = @"INSERT INTO [dbo].[Pacientes]
-                                                  ([MunicipioId]
-                                                  ,[NomePaciente]
+                                                   ([NomePaciente]
                                                   ,[DataNascimento]
                                                   ,[DataInicio]
                                                   ,[DataRenovacao]
-                                                  ,[DecricaoPaciente]
-                                                  ,[Observaçao]
+                                                  ,[DescricaoPaciente]
+                                                  ,[Observacao]
                                                   ,[Particulariedade]
                                                   ,[Jornada]
                                                   ,[DataCriacao]
@@ -78,13 +77,12 @@ namespace DevFM.SqlServerAdapter
                                                   ,[Ativo])
 	                                        	   OUTPUT INSERTED.PacienteId
                                             VALUES
-                                                  (@MunicipioId
-                                                  ,@NomePaciente
+                                                  (@NomePaciente
                                                   ,@DataNascimento
                                                   ,@DataInicio
                                                   ,@DataRenovacao
-                                                  ,@DecricaoPaciente
-                                                  ,@Observaçao
+                                                  ,@DescricaoPaciente
+                                                  ,@Observacao
                                                   ,@Particulariedade
                                                   ,@Jornada
                                                   ,GETDATE()
@@ -244,29 +242,35 @@ namespace DevFM.SqlServerAdapter
             {
                 paciente_Pacote.PacienteId = pacienteId;
                 const string sql_paciente_pacote = @"INSERT INTO [dbo].[Paciente_Pacotes]
-                                                                       ([PacienteId]
-                                                                       ,[PacoteId]
-                                                                       ,[PacoteMensal]
-                                                                       ,[DiaPlantao]
-                                                                       ,[ValorPacote]
-                                                                       ,[SalarioCuidador]
-                                                                       ,[SalarioDiaCuidador]
-                                                                       ,[ValorPlataoCuidador]
-                                                                       ,[ValorDesconto]
-                                                                       ,[TaxaAdminstrativa]
-                                                                       ,[DataCriacao]
-                                                                       ,[DataAlteracao]
-                                                                       ,[Ativo])
+                                                                     ([PacienteId]
+                                                                      ,[PacoteId]
+                                                                      ,[PacoteMensal]
+                                                                      ,[ValorPacote]
+                                                                      ,[DiaPlantao]
+                                                                      ,[ValorPlantaoPacote]
+                                                                      ,[SalarioCuidador]
+                                                                      ,[SalarioDiaCuidador]
+                                                                      ,[ValorPlantaoCuidador]
+                                                                      ,[Observacao]
+                                                                      ,[ValorDesconto]
+                                                                      ,[ValorAcrescimo]
+                                                                      ,[TaxaAdminstrativa]
+                                                                      ,[DataCriacao]
+                                                                      ,[DataAlteracao]
+                                                                      ,[Ativo])
                                                                  VALUES
                                                                        (@PacienteId
                                                                        ,@PacoteId
                                                                        ,@PacoteMensal
-                                                                       ,@DiaPlantao
                                                                        ,@ValorPacote
+                                                                       ,@DiaPlantao
+                                                                       ,@ValorPlantaoPacote
                                                                        ,@SalarioCuidador
                                                                        ,@SalarioDiaCuidador
-                                                                       ,@ValorPlataoCuidador
+                                                                       ,@ValorPlantaoCuidador
+                                                                       ,@Observacao
                                                                        ,@ValorDesconto
+                                                                       ,@ValorAcrescimo
                                                                        ,@TaxaAdminstrativa
                                                                        ,GETDATE()
                                                                        ,GETDATE()

@@ -24,7 +24,7 @@ namespace DevFM.WebApi.Controllers
             _logger = loggerFactory?.CreateLogger<PacienteController>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _pacienteService = PacienteService ?? throw new ArgumentNullException(nameof(PacienteService));
         }
-        [HttpGet("get-lista-paciente")]
+        [HttpGet("paciente/get-lista-paciente")]
         [ProducesResponseType(typeof(PacienteDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -47,7 +47,7 @@ namespace DevFM.WebApi.Controllers
                 throw ex;
             }
         }
-        [HttpGet("get-Paciente/pacienteId")]
+        [HttpGet("paciente/get-paciente/{pacienteId}")]
         [ActionName(nameof(GetPacientePorIdAsync))]
         [ProducesResponseType(typeof(PacienteDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -72,7 +72,7 @@ namespace DevFM.WebApi.Controllers
             }
         }
 
-        [HttpPost("post-paciente")]        
+        [HttpPost("paciente/post-paciente")]        
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType( StatusCodes.Status500InternalServerError)]

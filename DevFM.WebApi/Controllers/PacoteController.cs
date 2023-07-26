@@ -24,7 +24,7 @@ namespace DevFM.WebApi.Controllers
             _logger = loggerFactory?.CreateLogger<PacoteController>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _pacoteService = pacoteService ?? throw new ArgumentNullException(nameof(pacoteService));
         }
-        [HttpGet("get-lista-pacote")]
+        [HttpGet("pacote/get-lista-pacote")]
         [ProducesResponseType(typeof(PacoteDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -47,7 +47,7 @@ namespace DevFM.WebApi.Controllers
                 throw ex;
             }
         }
-        [HttpGet("get-Pacote/pacoteId")]
+        [HttpGet("pacote/get-Pacote/pacoteId")]
         [ActionName(nameof(GetPacotePorIdAsync))]
         [ProducesResponseType(typeof(PacoteDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -72,7 +72,7 @@ namespace DevFM.WebApi.Controllers
             }
         }
 
-        [HttpPost("post-pacote")]        
+        [HttpPost("pacote/post-pacote")]        
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType( StatusCodes.Status500InternalServerError)]
@@ -95,7 +95,7 @@ namespace DevFM.WebApi.Controllers
         /// <param name="pacotePostDto">Parametro do aluno</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        [HttpPut("put-aluno")]
+        [HttpPut("pacote/put-pacote")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType( StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
