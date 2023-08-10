@@ -10,6 +10,7 @@ namespace DevFM.Domain.Models
     {
         public int PacienteId { get; set; }
         public int PacoteId { get; set; }
+        public string DescricaoPacoteMensal { get; set; }
         public decimal? PacoteMensal { get; set; } 
         public int? DiaPlantao { get;set; }
         public decimal? ValorPacote { get; set; }

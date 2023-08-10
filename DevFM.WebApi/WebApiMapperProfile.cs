@@ -28,11 +28,11 @@ namespace DevFM.WebApi
               .ForMember(o => o.TelefonesCuidador, m => m.MapFrom(x => x.TelefonesCuidador)).ReverseMap();
 
             CreateMap<PacienteDto, Paciente>()
-              .ForMember(o => o.RespensaveisPacientes, m => m.MapFrom(x => x.ResponsaveisPacienteDtos))
-              .ForMember(o => o.TelefonesPacientes, m => m.MapFrom(x => x.TelefonesPacienteDtos))
-              .ForMember(o => o.AtendimentosPacientes, m => m.MapFrom(x => x.AtendimentosPacienteDtos))
-              .ForMember(o => o.EnderecosPaciente, m => m.MapFrom(x => x.EnderecosPacienteDtos))
-              .ForMember(o => o.Paciente_Pacotes, m => m.MapFrom(x => x.Paciente_PacoteDtos)).ReverseMap();
+              .ForMember(o => o.RespensaveisPacientes, m => m.MapFrom(x => x.ResponsaveisPaciente))
+              .ForMember(o => o.TelefonesPacientes, m => m.MapFrom(x => x.TelefonesPaciente))
+              .ForMember(o => o.AtendimentosPacientes, m => m.MapFrom(x => x.AtendimentosPaciente))
+              .ForMember(o => o.EnderecosPaciente, m => m.MapFrom(x => x.EnderecosPaciente))
+              .ForMember(o => o.Paciente_Pacotes, m => m.MapFrom(x => x.Paciente_Pacotes)).ReverseMap();
 
             CreateMap<PacientePostDto, Paciente>()
                .ForMember(o => o.RespensaveisPacientes, m => m.MapFrom(x => x.ResponsaveisPacientePostDtos))
@@ -40,16 +40,26 @@ namespace DevFM.WebApi
                .ForMember(o => o.AtendimentosPacientes, m => m.MapFrom(x => x.AtendimentosPacientePostDtos))
                .ForMember(o => o.EnderecosPaciente, m => m.MapFrom(x => x.EnderecosPacientePostDtos))
                .ForMember(o => o.Paciente_Pacotes, m => m.MapFrom(x => x.Paciente_PacotePostPostDtos)).ReverseMap();
+
+            CreateMap<PacientePutDto, Paciente>()
+                .ForMember(o => o.RespensaveisPacientes, m => m.MapFrom(x => x.ResponsaveisPacientePutDtos))
+                .ForMember(o => o.TelefonesPacientes, m => m.MapFrom(x => x.TelefonesCuidadorPutDtos))
+                .ForMember(o => o.AtendimentosPacientes, m => m.MapFrom(x => x.AtendimentosPacientePutDtos))
+                .ForMember(o => o.EnderecosPaciente, m => m.MapFrom(x => x.EnderecosPacientePutDtos))
+                .ForMember(o => o.Paciente_Pacotes, m => m.MapFrom(x => x.Paciente_PacotePutDtos)).ReverseMap();
+
             CreateMap<PacoteDto, Pacote>().ReverseMap();
-            CreateMap<PacotePostDto, Pacote>().ReverseMap();
+            CreateMap<PacotePostDto, Pacote>().ReverseMap();            
             CreateMap<PacoteUpdateDto, Pacote>().ReverseMap();
             CreateMap<Paciente_PacoteDto, Paciente_Pacote>().ReverseMap();
             CreateMap<Paciente_PacotePostDto, Paciente_Pacote>().ReverseMap();
+            CreateMap<Paciente_PacotePutDto, Paciente_Pacote>().ReverseMap();
 
 
 
             CreateMap<CuidadorPostDto, Cuidador>().ReverseMap();
             CreateMap<TelefonePostDto, Telefone>().ReverseMap();
+            
 
             CreateMap<CuidadorPutDto, Cuidador>().ReverseMap();
             CreateMap<TelefonePutDto, Telefone>().ReverseMap();
@@ -58,13 +68,22 @@ namespace DevFM.WebApi
             CreateMap<ResponsavelPostDto, Responsavel>().ReverseMap();
             CreateMap<AtendimentoPostDto, Atendimento>().ReverseMap();
 
+            CreateMap<EnderecoPutDto, Endereco>().ReverseMap();
+            CreateMap<ResponsavelPutDto, Responsavel>().ReverseMap();
+            CreateMap<AtendimentoPutDto, Atendimento>().ReverseMap();
+
 
             CreateMap<EnderecoDto, Endereco>().ReverseMap();
             CreateMap<ResponsavelDto, Responsavel>()
                 .ForMember(o => o.TelefonesResponsaveis, m => m.MapFrom(x => x.TelefonesResponsavel)).ReverseMap();
             CreateMap<ResponsavelPostDto, Responsavel>()
                .ForMember(o => o.TelefonesResponsaveis, m => m.MapFrom(x => x.TelefonesResponsavel)).ReverseMap();
-            CreateMap<AtendimentoDto, Atendimento>().ReverseMap();
+            CreateMap<AtendimentoDto, Atendimento>()
+                 .ForMember(destino => destino.DescricaoTurno, opt => opt.MapFrom(origem => origem.Turno))
+                 .ForMember(o => o.TelefonesCuidador, m => m.MapFrom(x => x.TelefonesCuidador)).ReverseMap();
+            CreateMap<ResponsavelPutDto, Responsavel>()
+                 .ForMember(o => o.TelefonesResponsaveis, m => m.MapFrom(x => x.TelefonesResponsavel)).ReverseMap();
+         
 
             CreateMap<UsuarioPostDto, Usuario>().ReverseMap();
             CreateMap<UsuarioDto, Usuario>().ReverseMap();

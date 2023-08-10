@@ -55,6 +55,7 @@ namespace DevFM.WebApi.Controllers
                 throw ex;
             }
         }
+
         [HttpGet("cuidador/get-cuidador/{cuidadorId}")]
         [ActionName(nameof(GetCuidadorPorIdAsync))]
         [ProducesResponseType(typeof(CuidadorDto), StatusCodes.Status200OK)]
