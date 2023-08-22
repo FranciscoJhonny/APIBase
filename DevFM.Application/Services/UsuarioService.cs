@@ -43,22 +43,25 @@ namespace DevFM.Application.Services
             string senhaMD5 = Recursos.ObterHashMD5(senha);
 
             Usuario usuario = await _usuarioSqlAdapter.ObterPorUsuarioSenhaAsync(login, senhaMD5);
-
-            if (usuario == null)
-                throw new ArgumentNullException(nameof(usuario));
-
-            //if (usuario.DataUltimoAcesso is not null)
-            //    await _mSUsuarioSqlWrite.AtualizarUltimoAcessoAsync(usuario.MSUsuarioID);
-
-            UsuarioLogadoVM usuarioLogado = new UsuarioLogadoVM()
+           
+            if (usuario != null)
             {
-                UsuarioId = usuario.UsuarioId,
-                Nome = usuario.Nome,
-                Email = usuario.Email,
-                PerfilId = usuario.PerfilId
-            };
+                UsuarioLogadoVM usuarioLogado = new UsuarioLogadoVM()
+                {
+                    UsuarioId = usuario.UsuarioId,
+                    Nome = usuario.Nome,
+                    Email = usuario.Email,
+                    PerfilId = usuario.PerfilId
+                };
+                return usuarioLogado;
+            }
 
-            return usuarioLogado;
+            return null;
+            
+        }
+        public async Task<int> VerificaUsuarioAsync(string email)
+        {
+            return await _usuarioSqlAdapter.VerificaUsuarioAsync(email);
         }
 
     }

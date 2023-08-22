@@ -7,7 +7,7 @@ namespace DevFM.Domain.Adapters
         Task<IEnumerable<Usuario>> ObterUsuarioAsync();
         Task<Usuario> ObterUsuarioPorIdAsync(int UsuarioId);
         Task<int> NewUsuarioAsync(Usuario Usuario);
-
         Task<Usuario> ObterPorUsuarioSenhaAsync(string login, string senha);
+        Task<int> VerificaUsuarioAsync(string email);
     }
 }

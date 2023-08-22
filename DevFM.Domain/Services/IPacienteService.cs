@@ -5,6 +5,7 @@ namespace DevFM.Domain.Services
     public interface IPacienteService
     {
         Task<IEnumerable<Paciente>> ObterPacienteAsync();
+        Task<IEnumerable<Paciente>> ObterPacienteParametroAsync(int filtro, string nome);
         Task<Paciente> ObterPacientePorIdAsync(int pacienteId);
         Task<int> NewPacienteAsync(Paciente paciente);
         Task<IEnumerable<Telefone>> ObterTelefonesPacienteAsync(int pacienteId);

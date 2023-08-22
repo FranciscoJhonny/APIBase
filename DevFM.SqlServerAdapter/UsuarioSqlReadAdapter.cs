@@ -97,5 +97,11 @@ namespace DevFM.SqlServerAdapter
 
             return await _connection.QueryFirstOrDefaultAsync<Usuario>(sql, new { login, senha }, commandType: CommandType.Text);
         }
+        public async Task<int> VerificaUsuarioAsync(string email)
+        {
+            const string sql = @"SELECT COUNT(UsuarioId)FROM dbo.Usuario WHERE Email = @Email;";
+
+            return await _connection.ExecuteScalarAsync<int>(sql, new { email }, commandType: CommandType.Text);
+        }
     }
 }

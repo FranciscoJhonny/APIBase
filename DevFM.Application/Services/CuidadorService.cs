@@ -5,6 +5,7 @@ using DevFM.Domain.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,6 +23,10 @@ namespace DevFM.Application.Services
         public async Task<IEnumerable<Cuidador>> ObterCuidadorAsync()
         {
             return await _cuidadorSqlAdapter.ObterCuidadorAsync();
+        }
+        public async Task<IEnumerable<Cuidador>> ObterCuidadorNomeAsync(int filtro, string nome)
+        {
+            return await _cuidadorSqlAdapter.ObterCuidadorNomeAsync(filtro, nome);
         }
 
         public async Task<Cuidador> ObterCuidadorPorIdAsync(int CuidadorId)

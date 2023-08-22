@@ -1,6 +1,6 @@
 ﻿namespace DevFM.WebApi
 {
-    public class Util
+    public class Utilitario
     {
       
         /// <summary>

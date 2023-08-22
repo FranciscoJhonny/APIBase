@@ -3,6 +3,7 @@ using DevFM.Application.Services;
 using DevFM.Domain.Models;
 using DevFM.Domain.Services;
 using DevFM.WebApi.Dtos;
+using DevFM.WebApi.Util;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevFM.WebApi.Controllers
@@ -25,7 +26,7 @@ namespace DevFM.WebApi.Controllers
             _logger = loggerFactory?.CreateLogger<UsuarioController>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _usuarioService = UsuarioService ?? throw new ArgumentNullException(nameof(UsuarioService));
         }
-        [HttpGet("get-lista-usuario")]
+        [HttpGet("usuario/get-lista-usuario")]
         [ProducesResponseType(typeof(UsuarioDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -48,7 +49,7 @@ namespace DevFM.WebApi.Controllers
                 throw ex;
             }
         }
-        [HttpGet("get-usuario/usuarioId")]
+        [HttpGet("usuario/get-usuario/usuarioId")]
         [ActionName(nameof(GetUsuarioPorIdAsync))]
         [ProducesResponseType(typeof(UsuarioDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -73,10 +74,10 @@ namespace DevFM.WebApi.Controllers
             }
         }
 
-        [HttpPost("post-Usuario")]        
+        [HttpPost("usuario/post-Usuario")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType( StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> PostUsuario([FromBody] UsuarioPostDto usuarioDto)
         {
             if (usuarioDto is null)
@@ -96,10 +97,10 @@ namespace DevFM.WebApi.Controllers
         /// <param name="loginUsuario">Parametro do aluno</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        [HttpPost("login")]
+        [HttpPost("usuario/login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType( StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> PostLogin([FromBody] LoginUsuarioDto loginUsuario)
         {
             if (loginUsuario is null)
@@ -108,10 +109,35 @@ namespace DevFM.WebApi.Controllers
             var msUsuario = await _usuarioService.LoginUsuario(loginUsuario.Usuario, loginUsuario.Senha);
 
             if (msUsuario == null)
-                return NotFound();
+                return NotFound(new ApiResponse(401, $"Usuario ou senha invalido"));
+
+            //return NotFound(new ApiResponse(401, $"Produto não encontrado.( id ={id}) ")); exemplo
 
             return Ok(msUsuario);
 
+        }
+        [HttpGet("usuario/get-verifica-usuario")]
+        [ProducesResponseType(typeof(UsuarioDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetVerificaUsuarioAsync(string email)
+        {
+            try
+            {
+                var exite_usuario = await _usuarioService.VerificaUsuarioAsync(email);
+
+
+
+                if (exite_usuario > 0)
+                    return NotFound(new ApiResponse(100, null));
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
     }
 }

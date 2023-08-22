@@ -40,6 +40,28 @@ namespace DevFM.SqlServerAdapter
 
             return await _connection.QueryAsync<Paciente>(sql, commandType: CommandType.Text);
         }
+        public async Task<IEnumerable<Paciente>> ObterPacienteParametroAsync(int filtro, string nome)
+        {
+            const string sql = @"SELECT [PacienteId]
+                                        ,[MunicipioId]
+                                        ,[NomePaciente]
+                                        ,[DataNascimento]
+                                        ,[DataInicio]
+                                        ,[DataRenovacao]
+                                        ,[DescricaoPaciente]
+                                        ,[Observacao]
+                                        ,[Particulariedade]
+                                        ,[Jornada]
+                                        ,[DataCriacao]
+                                        ,[DataAlteracao]
+                                        ,[Ativo]
+                                    FROM [dbo].[Pacientes]
+                                        WHERE   1 = 1
+                                  AND (@filtro != 1  OR NomePaciente LIKE ''+ @nome + '%')
+                                  AND (@filtro != 2 OR NomePaciente LIKE '%'+ @nome +'%')";
+
+            return await _connection.QueryAsync<Paciente>(sql,new { filtro, nome }, commandType: CommandType.Text);
+        }
         public async Task<Paciente> ObterPacientePorIdAsync(int pacienteId)
         {
             const string sql = @"SELECT [PacienteId]

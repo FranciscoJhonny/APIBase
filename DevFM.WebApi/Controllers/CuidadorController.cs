@@ -56,6 +56,40 @@ namespace DevFM.WebApi.Controllers
             }
         }
 
+        [HttpGet("cuidador/get-lista-cuidador-nome")]
+        [ProducesResponseType(typeof(CuidadorDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetCuidadoresParametroAsync(int filtro, string nome)
+        {
+            try
+            {
+                //filtro = 0 todos
+                //filtro = 1 começa com
+                //filtro  = 2 contem 
+                var Cuidador = await _cuidadorService.ObterCuidadorNomeAsync(filtro, nome);
+                var listaCuidadorDTO = _mapper.Map<IEnumerable<CuidadorDto>>(Cuidador);
+
+                foreach (var item in listaCuidadorDTO)
+                {
+                    var listaTelefonesCuidador = await _cuidadorService.ObterTelefonesCuidadorAsync(item.CuidadorId);
+                    item.TelefonesCuidador = _mapper.Map<IEnumerable<TelefoneDto>>(listaTelefonesCuidador);
+                }
+
+                var response = listaCuidadorDTO;
+
+                if (response == null)
+                    return NotFound();
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
         [HttpGet("cuidador/get-cuidador/{cuidadorId}")]
         [ActionName(nameof(GetCuidadorPorIdAsync))]
         [ProducesResponseType(typeof(CuidadorDto), StatusCodes.Status200OK)]
@@ -69,7 +103,7 @@ namespace DevFM.WebApi.Controllers
 
                 var response = _mapper.Map<CuidadorDto>(Cuidador);
 
-              
+
 
                 if (response == null)
                     return NotFound();
@@ -86,10 +120,10 @@ namespace DevFM.WebApi.Controllers
             }
         }
 
-        [HttpPost("cuidador/post-cuidador")]        
+        [HttpPost("cuidador/post-cuidador")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType( StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> PostCuidador([FromBody] CuidadorPostDto cuidadorDto)
         {
             if (cuidadorDto is null)

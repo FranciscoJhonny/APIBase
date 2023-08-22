@@ -22,6 +22,10 @@ namespace DevFM.Application.Services
         {
             return await _pacienteSqlAdapter.ObterPacienteAsync();
         }
+        public async Task<IEnumerable<Paciente>> ObterPacienteParametroAsync(int filtro, string nome)
+        {
+            return await _pacienteSqlAdapter.ObterPacienteParametroAsync(filtro,nome);
+        }
 
         public async Task<Paciente> ObterPacientePorIdAsync(int pacienteId)
         {

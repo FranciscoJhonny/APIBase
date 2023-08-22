@@ -9,5 +9,6 @@ namespace DevFM.Domain.Services
         Task<Usuario> ObterUsuarioPorIdAsync(int usuarioId);
         Task<int> NewUsuarioAsync(Usuario usuario);
         Task<UsuarioLogadoVM> LoginUsuario(string login, string senha);
+        Task<int> VerificaUsuarioAsync(string email);
     }
 }

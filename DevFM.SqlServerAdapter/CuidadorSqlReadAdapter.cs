@@ -33,6 +33,20 @@ namespace DevFM.SqlServerAdapter
 
             return await _connection.QueryAsync<Cuidador>(sql, commandType: CommandType.Text);
         }
+        public async Task<IEnumerable<Cuidador>> ObterCuidadorNomeAsync(int filtro, string nome)
+        {
+            const string sql = @"SELECT  [CuidadorId] ,
+                                         [NomeCuidador] ,
+                                         [CategoriaId] ,
+                                         [DataAlteracao] ,
+                                         [Ativo]
+                                 FROM    [dbo].[Cuidadores]
+                                 WHERE   1 = 1
+                                  AND (@filtro != 1  OR NomeCuidador LIKE ''+ @nome + '%')
+                                  AND (@filtro != 2 OR NomeCuidador LIKE '%'+ @nome +'%')";
+
+            return await _connection.QueryAsync<Cuidador>(sql, new {filtro, nome }, commandType: CommandType.Text);
+        }
         public async Task<IEnumerable<Telefone>> ObterTelefonesCuidadorAsync(int cuidadorId)
         {
             const string sql = @"SELECT t.TelefoneId,t.NumeroTelefone, t.TipoTelefoneId,tt.DescricaoTipoTelefone FROM dbo.Cuidadores c
