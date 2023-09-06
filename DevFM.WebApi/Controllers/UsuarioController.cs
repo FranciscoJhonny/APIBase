@@ -120,18 +120,17 @@ namespace DevFM.WebApi.Controllers
         [ProducesResponseType(typeof(UsuarioDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetVerificaUsuarioAsync(string email)
+        public async Task<bool> GetVerificaUsuarioAsync(string email)
         {
             try
             {
                 var exite_usuario = await _usuarioService.VerificaUsuarioAsync(email);
 
 
+                if (exite_usuario == 0)
+                    return false;
 
-                if (exite_usuario > 0)
-                    return NotFound(new ApiResponse(100, null));
-
-                return Ok();
+                return true;
             }
             catch (Exception ex)
             {
