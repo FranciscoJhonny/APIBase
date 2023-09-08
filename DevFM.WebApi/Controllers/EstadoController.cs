@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DevFM.Domain.Services;
 using DevFM.WebApi.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevFM.WebApi.Controllers
@@ -23,7 +24,7 @@ namespace DevFM.WebApi.Controllers
             _logger = loggerFactory?.CreateLogger<EstadoController>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _estadoService = estadoService ?? throw new ArgumentNullException(nameof(estadoService));
         }
-        [HttpGet("get-lista-estado")]
+        [HttpGet("get-lista-estado")]        
         [ProducesResponseType(typeof(EstadoDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

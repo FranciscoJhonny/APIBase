@@ -86,12 +86,10 @@ namespace DevFM.SqlServerAdapter
                                         Nome ,
                                         Email ,
                                         PerfilId ,
-                                        Ativo ,
-                                        DataInclusao ,
-                                        DataOperacao ,
+                                        Ativo ,                                        
                                         Senha ,
                                         TokenRecuperacaoSenha ,
-                                        DataRecuperacaoSenha FROM usuario
+                                        DataRecuperacaoSenha FROM dbo.Usuario
 	                                    WHERE Email = @login
 	                                    AND Senha = @senha";
 
@@ -102,6 +100,17 @@ namespace DevFM.SqlServerAdapter
             const string sql = @"SELECT COUNT(UsuarioId)FROM dbo.Usuario WHERE Email = @Email;";
 
             return await _connection.ExecuteScalarAsync<int>(sql, new { email }, commandType: CommandType.Text);
+        }
+
+        public async Task<Perfil> ObterPerfioPorIdAsync(int perfioId)
+        {
+            const string sql = @"SELECT PerfilId ,
+                                        Descricao ,
+                                        Ativo ,
+                                        DataInclusao ,
+                                        DataOperacao FROM dbo.Perfil WHERE PerfilId = @perfioId";
+
+            return await _connection.QueryFirstOrDefaultAsync<Perfil>(sql, new { perfioId }, commandType: CommandType.Text);
         }
     }
 }

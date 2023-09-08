@@ -3,11 +3,6 @@ using DevFM.Domain.Adapters;
 using DevFM.Domain.Models;
 using DevFM.Domain.Services;
 using DevFM.Domain.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DevFM.Application.Services
 {
@@ -43,7 +38,9 @@ namespace DevFM.Application.Services
             string senhaMD5 = Recursos.ObterHashMD5(senha);
 
             Usuario usuario = await _usuarioSqlAdapter.ObterPorUsuarioSenhaAsync(login, senhaMD5);
-           
+            usuario.Perfil = await _usuarioSqlAdapter.ObterPerfioPorIdAsync(usuario.PerfilId);
+
+
             if (usuario != null)
             {
                 UsuarioLogadoVM usuarioLogado = new UsuarioLogadoVM()
@@ -51,7 +48,8 @@ namespace DevFM.Application.Services
                     UsuarioId = usuario.UsuarioId,
                     Nome = usuario.Nome,
                     Email = usuario.Email,
-                    PerfilId = usuario.PerfilId
+                    PerfilId = usuario.PerfilId,
+                    DescricaoPerfil = usuario.Perfil.Descricao
                 };
                 return usuarioLogado;
             }

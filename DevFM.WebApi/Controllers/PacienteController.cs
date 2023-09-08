@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using DevFM.Application.Services;
 using DevFM.Domain.Models;
 using DevFM.Domain.Services;
 using DevFM.WebApi.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevFM.WebApi.Controllers
@@ -181,10 +181,7 @@ namespace DevFM.WebApi.Controllers
             }
         }
 
-
-
-
-
+        [Authorize(Roles = "Adminstrador")]
         [HttpGet("paciente/get-paciente/{pacienteId}")]
         [ActionName(nameof(GetPacientePorIdAsync))]
         [ProducesResponseType(typeof(PacienteDto), StatusCodes.Status200OK)]
@@ -250,6 +247,7 @@ namespace DevFM.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Adminstrador")]
         [HttpPost("paciente/post-paciente")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -267,7 +265,7 @@ namespace DevFM.WebApi.Controllers
 
         }
 
-
+        [Authorize(Roles = "Adminstrador")]
         [HttpPut("paciente/put-paciente")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

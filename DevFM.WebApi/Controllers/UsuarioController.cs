@@ -1,17 +1,15 @@
 ﻿using AutoMapper;
-using DevFM.Application.Services;
 using DevFM.Domain.Models;
 using DevFM.Domain.Services;
 using DevFM.WebApi.Dtos;
 using DevFM.WebApi.Util;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevFM.WebApi.Controllers
 {
-    /// <summary>
-	/// Controller ms alfabetiza do Avaliacao
-	/// </summary>
-	[ApiVersion("1.0")]
+
+    [ApiVersion("1.0")]
     public class UsuarioController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -74,6 +72,7 @@ namespace DevFM.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Adminstrador")]
         [HttpPost("usuario/post-Usuario")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -97,6 +96,7 @@ namespace DevFM.WebApi.Controllers
         /// <param name="loginUsuario">Parametro do aluno</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
+        [Authorize(Roles = "Adminstrador")]
         [HttpPost("usuario/login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -111,11 +111,11 @@ namespace DevFM.WebApi.Controllers
             if (msUsuario == null)
                 return NotFound(new ApiResponse(401, $"Usuario ou senha invalido"));
 
-            //return NotFound(new ApiResponse(401, $"Produto não encontrado.( id ={id}) ")); exemplo
-
             return Ok(msUsuario);
 
         }
+
+
         [HttpGet("usuario/get-verifica-usuario")]
         [ProducesResponseType(typeof(UsuarioDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

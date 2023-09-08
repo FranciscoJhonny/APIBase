@@ -1,16 +1,14 @@
 ﻿using AutoMapper;
-using DevFM.Application.Services;
 using DevFM.Domain.Models;
 using DevFM.Domain.Services;
 using DevFM.WebApi.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevFM.WebApi.Controllers
 {
-    /// <summary>
-	/// Controller ms alfabetiza do Avaliacao
-	/// </summary>
-	[ApiVersion("1.0")]
+
+    [ApiVersion("1.0")]
     public class CuidadorController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -90,6 +88,7 @@ namespace DevFM.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Adminstrador")]
         [HttpGet("cuidador/get-cuidador/{cuidadorId}")]
         [ActionName(nameof(GetCuidadorPorIdAsync))]
         [ProducesResponseType(typeof(CuidadorDto), StatusCodes.Status200OK)]
@@ -120,6 +119,7 @@ namespace DevFM.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Adminstrador")]
         [HttpPost("cuidador/post-cuidador")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -143,6 +143,7 @@ namespace DevFM.WebApi.Controllers
         /// <param name="cuidadorDto">Parametro do cuidador</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
+        [Authorize(Roles = "Adminstrador")]
         [HttpPut("cuidador/put-cuidador")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

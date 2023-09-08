@@ -27,6 +27,7 @@ namespace DevFM.Domain.ViewModels
         /// </summary>
         public int PerfilId { get; set; }
         public string Email { get; set; } 
+        public string DescricaoPerfil { get; set; }
 
     }
 }

@@ -2,6 +2,7 @@
 using DevFM.Domain.Models;
 using DevFM.Domain.Services;
 using DevFM.WebApi.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevFM.WebApi.Controllers
@@ -47,6 +48,8 @@ namespace DevFM.WebApi.Controllers
                 throw ex;
             }
         }
+
+        [Authorize(Roles = "Adminstrador")]
         [HttpGet("pacote/get-Pacote/pacoteId")]
         [ActionName(nameof(GetPacotePorIdAsync))]
         [ProducesResponseType(typeof(PacoteDto), StatusCodes.Status200OK)]
@@ -72,6 +75,7 @@ namespace DevFM.WebApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Adminstrador")]
         [HttpPost("pacote/post-pacote")]        
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -95,6 +99,7 @@ namespace DevFM.WebApi.Controllers
         /// <param name="pacotePostDto">Parametro do aluno</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
+        [Authorize(Roles = "Adminstrador")]
         [HttpPut("pacote/put-pacote")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType( StatusCodes.Status400BadRequest)]
