@@ -19,7 +19,7 @@ namespace DevFM.WebApi.Controllers
             _usuarioService = UsuarioService ?? throw new ArgumentNullException(nameof(UsuarioService));
         }
 
-        [HttpPost("usuario/login")]
+        [HttpPost("usuario/auth")]
         public async Task<IActionResult> Auth(string usuario, string senha)
         {
             if (usuario == null)

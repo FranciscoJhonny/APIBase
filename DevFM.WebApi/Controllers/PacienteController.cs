@@ -181,7 +181,7 @@ namespace DevFM.WebApi.Controllers
             }
         }
 
-        [Authorize(Roles = "Adminstrador")]
+        //[Authorize(Roles = "Adminstrador")]
         [HttpGet("paciente/get-paciente/{pacienteId}")]
         [ActionName(nameof(GetPacientePorIdAsync))]
         [ProducesResponseType(typeof(PacienteDto), StatusCodes.Status200OK)]
@@ -247,7 +247,7 @@ namespace DevFM.WebApi.Controllers
             }
         }
 
-        [Authorize(Roles = "Adminstrador")]
+        //[Authorize(Roles = "Adminstrador")]
         [HttpPost("paciente/post-paciente")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -265,7 +265,7 @@ namespace DevFM.WebApi.Controllers
 
         }
 
-        [Authorize(Roles = "Adminstrador")]
+        //[Authorize(Roles = "Adminstrador")]
         [HttpPut("paciente/put-paciente")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

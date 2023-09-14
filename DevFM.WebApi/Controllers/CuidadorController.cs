@@ -88,7 +88,7 @@ namespace DevFM.WebApi.Controllers
             }
         }
 
-        [Authorize(Roles = "Adminstrador")]
+        //[Authorize(Roles = "Adminstrador")]
         [HttpGet("cuidador/get-cuidador/{cuidadorId}")]
         [ActionName(nameof(GetCuidadorPorIdAsync))]
         [ProducesResponseType(typeof(CuidadorDto), StatusCodes.Status200OK)]
@@ -119,7 +119,7 @@ namespace DevFM.WebApi.Controllers
             }
         }
 
-        [Authorize(Roles = "Adminstrador")]
+        //[Authorize(Roles = "Adminstrador")]
         [HttpPost("cuidador/post-cuidador")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -143,7 +143,7 @@ namespace DevFM.WebApi.Controllers
         /// <param name="cuidadorDto">Parametro do cuidador</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        [Authorize(Roles = "Adminstrador")]
+        //[Authorize(Roles = "Adminstrador")]
         [HttpPut("cuidador/put-cuidador")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

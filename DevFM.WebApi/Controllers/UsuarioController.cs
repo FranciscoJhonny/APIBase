@@ -72,7 +72,7 @@ namespace DevFM.WebApi.Controllers
             }
         }
 
-        [Authorize(Roles = "Adminstrador")]
+        //[Authorize(Roles = "Adminstrador")]
         [HttpPost("usuario/post-Usuario")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -96,7 +96,7 @@ namespace DevFM.WebApi.Controllers
         /// <param name="loginUsuario">Parametro do aluno</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        [Authorize(Roles = "Adminstrador")]
+        //[Authorize(Roles = "Adminstrador")]
         [HttpPost("usuario/login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
