@@ -124,12 +124,12 @@ namespace DevFM.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> PostCuidador([FromBody] CuidadorPostDto cuidadorDto)
+        public async Task<IActionResult> PostCuidador([FromBody] CuidadorPostDto cuidadorPostDto)
         {
-            if (cuidadorDto is null)
-                throw new ArgumentNullException(nameof(cuidadorDto));
+            if (cuidadorPostDto is null)
+                throw new ArgumentNullException(nameof(cuidadorPostDto));
 
-            var cuidador = _mapper.Map<Cuidador>(cuidadorDto);
+            var cuidador = _mapper.Map<Cuidador>(cuidadorPostDto);
 
             var cuidadorId = await _cuidadorService.NewCuidadorAsync(cuidador);
 
