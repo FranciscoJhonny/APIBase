@@ -29,9 +29,9 @@ namespace DevFM.Application.Services
             return await _cuidadorSqlAdapter.ObterCuidadorNomeAsync(filtro, nome);
         }
 
-        public async Task<Cuidador> ObterCuidadorPorIdAsync(int CuidadorId)
+        public async Task<Cuidador> ObterCuidadorPorIdAsync(int cuidadorId)
         {
-            return await _cuidadorSqlAdapter.ObterCuidadorPorIdAsync(CuidadorId);
+            return await _cuidadorSqlAdapter.ObterCuidadorPorIdAsync(cuidadorId);
         }
 
         public async Task<int> NewCuidadorAsync(Cuidador cuidador)
@@ -46,6 +46,11 @@ namespace DevFM.Application.Services
         public async Task<int> UpdateCuidador(Cuidador cuidador)
         {
             return await _cuidadorSqlAdapter.UpdateCuidador(cuidador);
+        }
+
+        public async Task<bool> DeleteCuidadorPorIdAsync(int cuidadorId)
+        {
+            return await _cuidadorSqlAdapter.DeleteCuidadorPorIdAsync(cuidadorId);
         }
 
     }

@@ -16,6 +16,7 @@ namespace DevFM.Domain.Adapters
         Task<IEnumerable<Telefone>> ObterTelefoneCuidadorAsync(int cuidadorId);
         Task<IEnumerable<Paciente_Pacote>> ObterPaciente_PacoteAsync(int pacienteId);
         Task<int> UpdatePaciente(Paciente paciente);
+        Task<bool> DeletePacientePorIdAsync(int pacienteId);
 
 
 

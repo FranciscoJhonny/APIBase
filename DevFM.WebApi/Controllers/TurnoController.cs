@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DevFM.WebApi.Controllers
 {
     /// <summary>
-	/// Controller ms alfabetiza do Avaliacao
+	/// Controller Turno
 	/// </summary>
 	[ApiVersion("1.0")]
     public class TurnoController : ControllerBase

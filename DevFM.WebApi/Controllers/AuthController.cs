@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DevFM.Domain.Models;
 using DevFM.Domain.Services;
+using DevFM.WebApi.Dtos;
 using DevFM.WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,19 +21,22 @@ namespace DevFM.WebApi.Controllers
         }
 
         [HttpPost("usuario/auth")]
-        public async Task<IActionResult> Auth(string usuario, string senha)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Auth([FromBody] LoginUsuarioDto loginUsuarioDto)
         {
-            if (usuario == null)
-                throw new ArgumentNullException(nameof(usuario));
-            if (senha == null)
-                throw new ArgumentNullException(nameof(senha));
+            if (loginUsuarioDto.Usuario == null)
+                throw new ArgumentNullException(nameof(loginUsuarioDto.Usuario));
+            if (loginUsuarioDto.Senha== null)
+                throw new ArgumentNullException(nameof(loginUsuarioDto.Senha));
 
-            var dbusuario = await _usuarioService.LoginUsuario(usuario, senha);
+            var dbusuario = await _usuarioService.LoginUsuario(loginUsuarioDto.Usuario, loginUsuarioDto.Senha);
 
             if (dbusuario != null)
             {
-                var token = TokenService.GenerateToken(dbusuario);
-                return Ok(token);
+                var access_token = TokenService.GenerateToken(dbusuario);
+                return Ok(access_token);
             }
 
             return BadRequest("usename ou passorwd invalido");

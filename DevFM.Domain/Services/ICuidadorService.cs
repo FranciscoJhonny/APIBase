@@ -11,5 +11,7 @@ namespace DevFM.Domain.Services
         Task<int> NewCuidadorAsync(Cuidador cuidador);
         Task<IEnumerable<Telefone>> ObterTelefonesCuidadorAsync(int cuidadorId);
         Task<int> UpdateCuidador(Cuidador cuidador);
+        Task<bool> DeleteCuidadorPorIdAsync(int cuidadorId);
+
     }
 }

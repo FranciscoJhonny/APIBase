@@ -27,9 +27,17 @@ namespace DevFM.WebApi
             CreateMap<CuidadorDto, Cuidador>()
               .ForMember(o => o.TelefonesCuidador, m => m.MapFrom(x => x.TelefonesCuidador)).ReverseMap();
 
+            CreateMap<CuidadorDto, Cuidador>()
+              .ForMember(o => o.Telefones, m => m.MapFrom(x => x.TelefonesCuidador)).ReverseMap();
+
+            CreateMap<PacienteDto, Paciente>()              
+              .ForMember(o => o.Telefones, m => m.MapFrom(x => x.TelefonesPaciente)).ReverseMap();
+
+
             CreateMap<PacienteDto, Paciente>()
               .ForMember(o => o.RespensaveisPacientes, m => m.MapFrom(x => x.ResponsaveisPaciente))
-              .ForMember(o => o.TelefonesPacientes, m => m.MapFrom(x => x.TelefonesPaciente))
+              .ForMember(o => o.Telefones, m => m.MapFrom(x => x.TelefonesPaciente))
+              //.ForMember(o => o.TelefonesPacientes, m => m.MapFrom(x => x.TelefonesPaciente))
               .ForMember(o => o.AtendimentosPacientes, m => m.MapFrom(x => x.AtendimentosPaciente))
               .ForMember(o => o.EnderecosPaciente, m => m.MapFrom(x => x.EnderecosPaciente))
               .ForMember(o => o.Paciente_Pacotes, m => m.MapFrom(x => x.Paciente_Pacotes)).ReverseMap();

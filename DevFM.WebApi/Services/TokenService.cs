@@ -16,11 +16,11 @@ namespace DevFM.WebApi.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim("UsuarioId", usuario.UsuarioId.ToString()),
-                    new Claim("DescricaoPerfil", usuario.DescricaoPerfil),
+                    new Claim("usuarioId", usuario.UsuarioId.ToString()),
+                    new Claim("descricaoPerfil", usuario.DescricaoPerfil),
                     new Claim(ClaimTypes.Role, usuario.DescricaoPerfil),
-                    new Claim("Email", usuario.Email),
-                    new Claim("Nome", usuario.Nome),
+                    new Claim("email", usuario.Email),
+                    new Claim("nome", usuario.Nome),
                 }),
                 Expires = DateTime.UtcNow.AddHours(3),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -32,7 +32,7 @@ namespace DevFM.WebApi.Services
 
             return new
             {
-                token = tokenString
+                access_token = tokenString
             };
 
         }

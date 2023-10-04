@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DevFM.Application.Services;
 using DevFM.Domain.Models;
 using DevFM.Domain.Services;
 using DevFM.WebApi.Dtos;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DevFM.WebApi.Controllers
 {
     /// <summary>
-	/// Controller ms alfabetiza do Avaliacao
+	/// Controller paciente
 	/// </summary>
 	[ApiVersion("1.0")]
     public class PacienteController : ControllerBase
@@ -40,57 +41,6 @@ namespace DevFM.WebApi.Controllers
                 if (response == null)
                     return NotFound();
 
-
-                foreach (var pacienteDto in response)
-                {
-                    pacienteDto.Idade = Utilitario.YearsOld(pacienteDto.DataNascimento, DateTime.Now);
-
-                    var listaTelefonesPaciente = await _pacienteService.ObterTelefonesPacienteAsync(pacienteDto.PacienteId);
-
-                    if (listaTelefonesPaciente != null)
-                        pacienteDto.TelefonesPaciente = _mapper.Map<IEnumerable<TelefoneDto>>(listaTelefonesPaciente);
-
-                    var listaEnderecoPaciente = await _pacienteService.ObterEnderecoPacienteAsync(pacienteDto.PacienteId);
-
-                    if (listaEnderecoPaciente != null)
-                        pacienteDto.EnderecosPaciente = _mapper.Map<IEnumerable<EnderecoDto>>(listaEnderecoPaciente);
-
-                    var listaResponsavelPaciente = await _pacienteService.ObterResponsavelPacienteAsync(pacienteDto.PacienteId);
-
-                    if (listaResponsavelPaciente != null)
-                    {
-                        pacienteDto.ResponsaveisPaciente = _mapper.Map<IEnumerable<ResponsavelDto>>(listaResponsavelPaciente);
-
-                        foreach (var item in pacienteDto.ResponsaveisPaciente)
-                        {
-                            var telefoneResponsavel = await _pacienteService.ObterTelefoneResponsavelAsync(item.ResponsavelId);
-
-                            if (telefoneResponsavel != null)
-                            {
-                                item.TelefonesResponsavel = _mapper.Map<IEnumerable<TelefoneDto>>(telefoneResponsavel);
-                            }
-                        }
-                    }
-
-                    var listaAtendimentoPaciente = await _pacienteService.ObterAtendimentoPacienteAsync(pacienteDto.PacienteId);
-
-                    if (listaAtendimentoPaciente != null)
-                    {
-                        pacienteDto.AtendimentosPaciente = _mapper.Map<IEnumerable<AtendimentoDto>>(listaAtendimentoPaciente);
-
-                        foreach (var item in pacienteDto.AtendimentosPaciente)
-                        {
-                            var telefonesCuidador = await _pacienteService.ObterTelefoneCuidadorAsync(item.CuidadorId);
-                            if (telefonesCuidador != null)
-                                item.TelefonesCuidador = _mapper.Map<IEnumerable<TelefoneDto>>(telefonesCuidador);
-                        }
-                    }
-                    var listaPaciente_Pacote = await _pacienteService.ObterPaciente_PacoteAsync(pacienteDto.PacienteId);
-
-                    if (listaPaciente_Pacote != null)
-                        pacienteDto.Paciente_Pacotes = _mapper.Map<IEnumerable<Paciente_PacoteDto>>(listaPaciente_Pacote);
-                }
-
                 return Ok(response);
             }
             catch (Exception ex)
@@ -113,64 +63,6 @@ namespace DevFM.WebApi.Controllers
 
                 if (response == null)
                     return NotFound();
-
-
-                foreach (var pacienteDto in response)
-                {
-                    pacienteDto.Idade = Utilitario.YearsOld(pacienteDto.DataNascimento, DateTime.Now);
-
-                    var listaTelefonesPaciente = await _pacienteService.ObterTelefonesPacienteAsync(pacienteDto.PacienteId);
-
-                    if (listaTelefonesPaciente != null)
-                        pacienteDto.TelefonesPaciente = _mapper.Map<IEnumerable<TelefoneDto>>(listaTelefonesPaciente);
-
-                    var listaEnderecoPaciente = await _pacienteService.ObterEnderecoPacienteAsync(pacienteDto.PacienteId);
-
-                    if (listaEnderecoPaciente != null)
-                        pacienteDto.EnderecosPaciente = _mapper.Map<IEnumerable<EnderecoDto>>(listaEnderecoPaciente);
-
-                    var listaResponsavelPaciente = await _pacienteService.ObterResponsavelPacienteAsync(pacienteDto.PacienteId);
-
-                    if (listaResponsavelPaciente != null)
-                    {
-                        pacienteDto.ResponsaveisPaciente = _mapper.Map<IEnumerable<ResponsavelDto>>(listaResponsavelPaciente);
-
-                        foreach (var item in pacienteDto.ResponsaveisPaciente)
-                        {
-                            var telefoneResponsavel = await _pacienteService.ObterTelefoneResponsavelAsync(item.ResponsavelId);
-
-                            if (telefoneResponsavel != null)
-                            {
-                                item.TelefonesResponsavel = _mapper.Map<IEnumerable<TelefoneDto>>(telefoneResponsavel);
-                            }
-                        }
-                    }
-
-                    var listaAtendimentoPaciente = await _pacienteService.ObterAtendimentoPacienteAsync(pacienteDto.PacienteId);
-
-                    if (listaAtendimentoPaciente != null)
-                    {
-                        pacienteDto.AtendimentosPaciente = _mapper.Map<IEnumerable<AtendimentoDto>>(listaAtendimentoPaciente);
-
-                        foreach (var item in pacienteDto.AtendimentosPaciente)
-                        {
-                            var telefonesCuidador = await _pacienteService.ObterTelefoneCuidadorAsync(item.CuidadorId);
-                            if (telefonesCuidador != null)
-                                item.TelefonesCuidador = _mapper.Map<IEnumerable<TelefoneDto>>(telefonesCuidador);
-                        }
-
-
-                    }
-
-
-                    var listaPaciente_Pacote = await _pacienteService.ObterPaciente_PacoteAsync(pacienteDto.PacienteId);
-
-                    if (listaPaciente_Pacote != null)
-                        pacienteDto.Paciente_Pacotes = _mapper.Map<IEnumerable<Paciente_PacoteDto>>(listaPaciente_Pacote);
-                }
-
-
-
 
                 return Ok(response);
             }
@@ -246,6 +138,80 @@ namespace DevFM.WebApi.Controllers
                 throw ex;
             }
         }
+        [HttpGet("paciente/get-lista-paciente-mapa")]
+        [ProducesResponseType(typeof(PacienteDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetPacienteMapaAsync()
+        {
+            try
+            {
+                var Paciente = await _pacienteService.ObterPacienteAsync();
+
+                var response = _mapper.Map<IEnumerable<PacienteDto>>(Paciente);
+
+                if (response == null)
+                    return NotFound();
+
+
+                foreach (var pacienteDto in response)
+                {
+                    pacienteDto.Idade = Utilitario.YearsOld(pacienteDto.DataNascimento, DateTime.Now);
+
+                    var listaTelefonesPaciente = await _pacienteService.ObterTelefonesPacienteAsync(pacienteDto.PacienteId);
+
+                    if (listaTelefonesPaciente != null)
+                        pacienteDto.TelefonesPaciente = _mapper.Map<IEnumerable<TelefoneDto>>(listaTelefonesPaciente);
+
+                    var listaEnderecoPaciente = await _pacienteService.ObterEnderecoPacienteAsync(pacienteDto.PacienteId);
+
+                    if (listaEnderecoPaciente != null)
+                        pacienteDto.EnderecosPaciente = _mapper.Map<IEnumerable<EnderecoDto>>(listaEnderecoPaciente);
+
+                    var listaResponsavelPaciente = await _pacienteService.ObterResponsavelPacienteAsync(pacienteDto.PacienteId);
+
+                    if (listaResponsavelPaciente != null)
+                    {
+                        pacienteDto.ResponsaveisPaciente = _mapper.Map<IEnumerable<ResponsavelDto>>(listaResponsavelPaciente);
+
+                        foreach (var item in pacienteDto.ResponsaveisPaciente)
+                        {
+                            var telefoneResponsavel = await _pacienteService.ObterTelefoneResponsavelAsync(item.ResponsavelId);
+
+                            if (telefoneResponsavel != null)
+                            {
+                                item.TelefonesResponsavel = _mapper.Map<IEnumerable<TelefoneDto>>(telefoneResponsavel);
+                            }
+                        }
+                    }
+
+                    var listaAtendimentoPaciente = await _pacienteService.ObterAtendimentoPacienteAsync(pacienteDto.PacienteId);
+
+                    if (listaAtendimentoPaciente != null)
+                    {
+                        pacienteDto.AtendimentosPaciente = _mapper.Map<IEnumerable<AtendimentoDto>>(listaAtendimentoPaciente);
+
+                        foreach (var item in pacienteDto.AtendimentosPaciente)
+                        {
+                            var telefonesCuidador = await _pacienteService.ObterTelefoneCuidadorAsync(item.CuidadorId);
+                            if (telefonesCuidador != null)
+                                item.TelefonesCuidador = _mapper.Map<IEnumerable<TelefoneDto>>(telefonesCuidador);
+                        }
+                    }
+                    var listaPaciente_Pacote = await _pacienteService.ObterPaciente_PacoteAsync(pacienteDto.PacienteId);
+
+                    if (listaPaciente_Pacote != null)
+                        pacienteDto.Paciente_Pacotes = _mapper.Map<IEnumerable<Paciente_PacoteDto>>(listaPaciente_Pacote);
+                }
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
 
         //[Authorize(Roles = "Adminstrador")]
         [HttpPost("paciente/post-paciente")]
@@ -280,6 +246,31 @@ namespace DevFM.WebApi.Controllers
             await _pacienteService.UpdatePaciente(paciente);
 
             return Ok();
+        }
+
+
+        /// <summary>
+        /// Deletar paciente
+        /// </summary>
+        /// <param name="pacienteId"></param>
+        /// <returns></returns>
+        //[Authorize(Roles = "Adminstrador")]        
+        [HttpDelete("paciente/delete-paciente/{pacienteId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteCuidador(int pacienteId)
+        {
+            var paciente = await _pacienteService.ObterPacientePorIdAsync(pacienteId);
+
+            var response = _mapper.Map<PacienteDto>(paciente);
+
+            if (response == null)
+                return NotFound();
+
+            var result = await _pacienteService.DeletePacientePorIdAsync(pacienteId);
+
+            return Ok(result);
         }
     }
 }

@@ -21,18 +21,53 @@ namespace DevFM.SqlServerAdapter
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _connection = context.Connection ?? throw new ArgumentNullException(nameof(context));
             _logger = loggerFactory?.CreateLogger<CuidadorSqlReadAdapter>() ?? throw new ArgumentNullException(nameof(loggerFactory));
-        }
+        }       
         public async Task<IEnumerable<Cuidador>> ObterCuidadorAsync()
         {
-            const string sql = @"SELECT  [CuidadorId]
-                                        ,[NomeCuidador]
-                                        ,[CategoriaId]
-                                        ,[DataAlteracao]
-                                        ,[Ativo]
-                                   FROM [dbo].[Cuidadores]";
+            const string sql = @"SELECT * FROM dbo.Cuidadores c
+                                LEFT JOIN dbo.Cuidador_Telefones ct ON ct.CuidadorId = c.CuidadorId
+                                LEFT JOIN dbo.Telefones t ON t.TelefoneId = ct.TelefoneId";
+                                    
+            var retorno = await _connection.QueryAsync<Cuidador, Telefone, Cuidador>(sql,
+                (cuidador, cuidadorTelefone) =>
+                {
+                    if (cuidadorTelefone is not null) cuidador.Telefones.Add(cuidadorTelefone);
+                    return cuidador;
+                }, splitOn: "TelefoneId", commandType: CommandType.Text);
 
-            return await _connection.QueryAsync<Cuidador>(sql, commandType: CommandType.Text);
+            var result = retorno.GroupBy(r => r.CuidadorId).Select(g =>
+            {
+                var groupedMSAluno = g.First();
+                if (groupedMSAluno.Telefones.Count() > 0)
+                    groupedMSAluno.Telefones = g.Select(r => r.Telefones.FirstOrDefault()).ToList();
+                return groupedMSAluno;
+            });
+
+            return result;
         }
+
+        public async Task<IEnumerable<Cuidador>> ObterComMSMatriculaAlunoTurmaAsync()
+        {
+            const string sql = @"SELECT * FROM dbo.Pacientes p
+                                    JOIN dbo.Paciente_Telefones pt ON pt.PacienteId = p.PacienteId
+                                    JOIN dbo.Telefones t ON t.TelefoneId = pt.TelefoneId";
+
+            var retorno = await _connection.QueryAsync<Cuidador, Telefone, Cuidador>(sql,
+                (msAluno, msMAT) =>
+                {
+                    msAluno.TelefonesCuidador = new List<Telefone> { msMAT };
+                    return msAluno;
+                }, splitOn: "TelefoneId", commandType: CommandType.Text);
+
+            return retorno;
+        }
+
+
+
+
+
+
+
         public async Task<IEnumerable<Cuidador>> ObterCuidadorNomeAsync(int filtro, string nome)
         {
             const string sql = @"SELECT  [CuidadorId] ,
@@ -177,6 +212,30 @@ namespace DevFM.SqlServerAdapter
             return id;
         }
 
+        public async Task<bool> DeleteCuidadorPorIdAsync(int cuidadorId)
+        {
+            
 
+            const string sql_telefoneId = @"SELECT TelefoneId FROM dbo.Cuidador_Telefones WHERE CuidadorId = @CuidadorId";
+
+
+            var listTelefoneId = await _connection.QueryAsync<int>(sql_telefoneId, new { cuidadorId }, commandType: CommandType.Text);
+
+            const string sql_delete_cuidador_telefone = @"DELETE FROM dbo.Cuidador_Telefones WHERE CuidadorId = @CuidadorId";
+
+            var id = await _connection.ExecuteScalarAsync<int>(sql_delete_cuidador_telefone, new { cuidadorId }, commandType: CommandType.Text);
+
+            const string sql = @"DELETE FROM [dbo].[Cuidadores]                                   
+                                 WHERE [CuidadorId] = @CuidadorId";
+
+            await _connection.ExecuteScalarAsync<int>(sql, new { cuidadorId }, commandType: CommandType.Text);
+
+            foreach (var telefoneId in listTelefoneId)
+            {
+                const string sql_delete_telefone = @"DELETE FROM dbo.Telefones WHERE TelefoneId = @TelefoneId";
+                await _connection.ExecuteScalarAsync<int>(sql_delete_telefone, new { telefoneId }, commandType: CommandType.Text);
+            }
+            return true;
+        }
     }
 }

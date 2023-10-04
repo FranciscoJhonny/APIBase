@@ -91,7 +91,7 @@ namespace DevFM.WebApi.Controllers
         }
 
         /// <summary>
-        /// Efetua o login do usuário no MSAlfabetiza
+        /// Efetua o login do usuário 
         /// </summary>
         /// <param name="loginUsuario">Parametro do aluno</param>
         /// <returns></returns>

@@ -23,44 +23,53 @@ namespace DevFM.SqlServerAdapter
         }
         public async Task<IEnumerable<Paciente>> ObterPacienteAsync()
         {
-            const string sql = @"SELECT [PacienteId]
-                                        ,[MunicipioId]
-                                        ,[NomePaciente]
-                                        ,[DataNascimento]
-                                        ,[DataInicio]
-                                        ,[DataRenovacao]
-                                        ,[DescricaoPaciente]
-                                        ,[Observacao]
-                                        ,[Particulariedade]
-                                        ,[Jornada]
-                                        ,[DataCriacao]
-                                        ,[DataAlteracao]
-                                        ,[Ativo]
-                                    FROM [dbo].[Pacientes]";
+            const string sql = @"SELECT * FROM dbo.Pacientes p
+                                 LEFT JOIN dbo.Paciente_Telefones pt ON pt.PacienteId = p.PacienteId
+                                 LEFT JOIN dbo.Telefones t ON t.TelefoneId = pt.TelefoneId";
 
-            return await _connection.QueryAsync<Paciente>(sql, commandType: CommandType.Text);
+            var retorno = await _connection.QueryAsync<Paciente, Telefone, Paciente>(sql,
+                (paciente, paicienteTelefone) =>
+                {
+                    if (paicienteTelefone is not null) paciente.Telefones.Add(paicienteTelefone);
+                    return paciente;
+                }, splitOn: "TelefoneId", commandType: CommandType.Text);
+
+            var result = retorno.GroupBy(r => r.PacienteId).Select(g =>
+            {
+                var groupedPaciente = g.First();
+                if (groupedPaciente.Telefones.Count() > 0)
+                    groupedPaciente.Telefones = g.Select(r => r.Telefones.FirstOrDefault()).ToList();
+                return groupedPaciente;
+            });
+
+            return result;
         }
         public async Task<IEnumerable<Paciente>> ObterPacienteParametroAsync(int filtro, string nome)
         {
-            const string sql = @"SELECT [PacienteId]
-                                        ,[MunicipioId]
-                                        ,[NomePaciente]
-                                        ,[DataNascimento]
-                                        ,[DataInicio]
-                                        ,[DataRenovacao]
-                                        ,[DescricaoPaciente]
-                                        ,[Observacao]
-                                        ,[Particulariedade]
-                                        ,[Jornada]
-                                        ,[DataCriacao]
-                                        ,[DataAlteracao]
-                                        ,[Ativo]
-                                    FROM [dbo].[Pacientes]
+            const string sql = @"SELECT * FROM dbo.Pacientes p
+                                 LEFT JOIN dbo.Paciente_Telefones pt ON pt.PacienteId = p.PacienteId
+                                 LEFT JOIN dbo.Telefones t ON t.TelefoneId = pt.TelefoneId
                                         WHERE   1 = 1
-                                  AND (@filtro != 1  OR NomePaciente LIKE ''+ @nome + '%')
-                                  AND (@filtro != 2 OR NomePaciente LIKE '%'+ @nome +'%')";
+                                  AND (@filtro != 1  OR p.NomePaciente LIKE ''+ @nome + '%')
+                                  AND (@filtro != 2 OR p.NomePaciente LIKE '%'+ @nome +'%')";
 
-            return await _connection.QueryAsync<Paciente>(sql,new { filtro, nome }, commandType: CommandType.Text);
+            var retorno = await _connection.QueryAsync<Paciente, Telefone, Paciente>(sql,
+                 (paciente, paicienteTelefone) =>
+                 {
+                     if (paicienteTelefone is not null) paciente.Telefones.Add(paicienteTelefone);
+                     return paciente;
+                 },
+                new { filtro, nome }, splitOn: "TelefoneId", commandType: CommandType.Text);
+
+            var result = retorno.GroupBy(r => r.PacienteId).Select(g =>
+            {
+                var groupedPaciente = g.First();
+                if (groupedPaciente.Telefones.Count() > 0)
+                    groupedPaciente.Telefones = g.Select(r => r.Telefones.FirstOrDefault()).ToList();
+                return groupedPaciente;
+            });
+
+            return result;
         }
         public async Task<Paciente> ObterPacientePorIdAsync(int pacienteId)
         {
@@ -106,7 +115,6 @@ namespace DevFM.SqlServerAdapter
 
             return await _connection.QueryAsync<Responsavel>(sql, new { pacienteId }, commandType: CommandType.Text);
         }
-
         public async Task<IEnumerable<Telefone>> ObterTelefoneResponsavelAsync(int responsavelId)
         {
             const string sql = @"SELECT t.TelefoneId,t.NumeroTelefone, t.TipoTelefoneId,tt.DescricaoTipoTelefone FROM dbo.Responsavel_Telefones rt
@@ -673,5 +681,88 @@ namespace DevFM.SqlServerAdapter
             return paciente.PacienteId;
         }
 
+
+
+        public async Task<bool> DeletePacientePorIdAsync(int pacienteId)
+        {
+           
+
+            const string sql_telefoneId = @"SELECT	TelefoneId FROM dbo.Paciente_Telefones WHERE PacienteId = @PacienteId";
+
+
+            var listTelefoneId = await _connection.QueryAsync<int>(sql_telefoneId, new { pacienteId }, commandType: CommandType.Text);
+
+            const string sql_delete_paciente_telefone = @"DELETE FROM dbo.Paciente_Telefones WHERE PacienteId = @PacienteId";
+
+            var id = await _connection.ExecuteScalarAsync<int>(sql_delete_paciente_telefone, new { pacienteId }, commandType: CommandType.Text);
+
+
+            foreach (var telefoneId in listTelefoneId)
+            {
+                const string sql_delete_telefone = @"DELETE FROM dbo.Telefones WHERE TelefoneId = @TelefoneId";
+                await _connection.ExecuteScalarAsync<int>(sql_delete_telefone, new { telefoneId }, commandType: CommandType.Text);
+            }
+
+            const string sql_enderecoId = @"SELECT EnderecoId FROM dbo.Paciente_Enderecos WHERE PacienteId = @PacienteId";
+
+
+            var listEndereco = await _connection.QueryAsync<int>(sql_enderecoId, new { pacienteId }, commandType: CommandType.Text);
+
+            const string sql_delete_paciente_endereco = @"DELETE FROM dbo.Paciente_Enderecos WHERE PacienteId = @PacienteId";
+
+            var paciente_endereco_id = await _connection.ExecuteScalarAsync<int>(sql_delete_paciente_endereco, new { pacienteId }, commandType: CommandType.Text);
+
+
+            foreach (var enderecoId in listEndereco)
+            {
+                const string sql_delete_endereco = @"DELETE FROM dbo.Enderecos WHERE EnderecoId = @EnderecoId";
+                await _connection.ExecuteScalarAsync<int>(sql_delete_endereco, new { enderecoId }, commandType: CommandType.Text);
+            }
+
+            const string sql_responsavelId = @"SELECT ResponsavelId FROM dbo.Responsaveis WHERE PacienteId = @PacienteId";
+
+
+            var listaresponsavelId = await _connection.QueryAsync<int>(sql_responsavelId, new { pacienteId }, commandType: CommandType.Text);
+
+            foreach (var responsavel_Id in listaresponsavelId)
+            {
+
+                const string sql_responsavel_telefone_Id = @"SELECT TelefoneId  FROM dbo.Responsavel_Telefones WHERE ResponsavelId = @responsavel_Id";
+
+
+                var listresponsavel_telefonesId = await _connection.QueryAsync<int>(sql_responsavel_telefone_Id, new { responsavel_Id }, commandType: CommandType.Text);
+
+
+                const string sql_delete_responsavel_telefone = @"DELETE FROM dbo.Responsavel_Telefones WHERE ResponsavelId = @responsavel_Id";
+
+                await _connection.ExecuteScalarAsync<int>(sql_delete_responsavel_telefone, new { responsavel_Id }, commandType: CommandType.Text);
+
+                foreach (var endereco_telefone_Id in listresponsavel_telefonesId)
+                {
+                    const string sql_delete_telefone_responsavel = @"DELETE FROM dbo.Telefones WHERE TelefoneId = @endereco_telefone_Id";
+                    await _connection.ExecuteScalarAsync<int>(sql_delete_telefone_responsavel, new { endereco_telefone_Id }, commandType: CommandType.Text);
+                }
+
+                const string sql_delete_responsavel = @"DELETE FROM dbo.Responsaveis WHERE ResponsavelId = @responsavel_Id";
+                await _connection.ExecuteScalarAsync<int>(sql_delete_responsavel, new { responsavel_Id }, commandType: CommandType.Text);
+            }
+
+
+            const string sql_delete_paciente_pacote = @"DELETE FROM dbo.Paciente_Pacotes WHERE PacienteId = @PacienteId";
+
+            var paciente_pacote_id = await _connection.ExecuteScalarAsync<int>(sql_delete_paciente_pacote, new { pacienteId }, commandType: CommandType.Text);
+
+            const string sql_delete_atendimento = @"DELETE FROM dbo.Atendimentos WHERE PacienteId = @PacienteId";
+
+            var paciente_atendiemento_id = await _connection.ExecuteScalarAsync<int>(sql_delete_atendimento, new { pacienteId }, commandType: CommandType.Text);
+
+            const string sql_delete_paciente = @"DELETE FROM dbo.Pacientes WHERE PacienteId = @PacienteId";
+
+
+             await _connection.QueryAsync<int>(sql_delete_paciente, new { pacienteId }, commandType: CommandType.Text);
+
+            return true;
+
+        }
     }
 }

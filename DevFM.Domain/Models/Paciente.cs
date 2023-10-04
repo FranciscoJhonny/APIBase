@@ -22,6 +22,7 @@ namespace DevFM.Domain.Models
         public DateTime DataAlteracao { get; set; }
         public bool Ativo { get; set; }
         public IEnumerable<Telefone> TelefonesPacientes {  get; set; } = Enumerable.Empty<Telefone>();
+        public List<Telefone> Telefones { get; set; } = new List<Telefone>();
         public IEnumerable<Endereco> EnderecosPaciente { get; set; } = Enumerable.Empty<Endereco>();
         public IEnumerable<Responsavel> RespensaveisPacientes { get; set; } = Enumerable.Empty<Responsavel>();
         public IEnumerable<Atendimento> AtendimentosPacientes { get; set; }= Enumerable.Empty<Atendimento>();

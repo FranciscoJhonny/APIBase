@@ -23,6 +23,7 @@ namespace DevFM.WebApi.Controllers
             _logger = loggerFactory?.CreateLogger<CuidadorController>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _cuidadorService = cuidadorService ?? throw new ArgumentNullException(nameof(cuidadorService));
         }
+        //[Authorize]
         [HttpGet("cuidador/get-lista-cuidador")]
         [ProducesResponseType(typeof(CuidadorDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -32,15 +33,8 @@ namespace DevFM.WebApi.Controllers
             try
             {
                 var Cuidador = await _cuidadorService.ObterCuidadorAsync();
-                var listaCuidadorDTO = _mapper.Map<IEnumerable<CuidadorDto>>(Cuidador);
 
-                foreach (var item in listaCuidadorDTO)
-                {
-                    var listaTelefonesCuidador = await _cuidadorService.ObterTelefonesCuidadorAsync(item.CuidadorId);
-                    item.TelefonesCuidador = _mapper.Map<IEnumerable<TelefoneDto>>(listaTelefonesCuidador);
-                }
-
-                var response = listaCuidadorDTO;
+                var response = _mapper.Map<IEnumerable<CuidadorDto>>(Cuidador);
 
                 if (response == null)
                     return NotFound();
@@ -102,12 +96,11 @@ namespace DevFM.WebApi.Controllers
 
                 var response = _mapper.Map<CuidadorDto>(Cuidador);
 
-
-
                 if (response == null)
                     return NotFound();
 
                 var listaTelefonesCuidador = await _cuidadorService.ObterTelefonesCuidadorAsync(response.CuidadorId);
+
                 response.TelefonesCuidador = _mapper.Map<IEnumerable<TelefoneDto>>(listaTelefonesCuidador);
 
                 return Ok(response);
@@ -158,6 +151,31 @@ namespace DevFM.WebApi.Controllers
             await _cuidadorService.UpdateCuidador(cuidador);
 
             return Ok();
+        }
+
+        /// <summary>
+        /// Editar cuidador
+        /// </summary>
+        /// <param name="cuidadorDto">Parametro do cuidador</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        //[Authorize(Roles = "Adminstrador")]        
+        [HttpDelete("cuidador/delete-cuidador/{cuidadorId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteCuidador(int cuidadorId)
+        {
+            var cuidador = await _cuidadorService.ObterCuidadorPorIdAsync(cuidadorId);
+
+            var response = _mapper.Map<CuidadorDto>(cuidador);
+
+            if (response == null)
+                return NotFound();
+
+           var result =  await _cuidadorService.DeleteCuidadorPorIdAsync(cuidadorId);
+
+            return Ok(result);
         }
     }
 }

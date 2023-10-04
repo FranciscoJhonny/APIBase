@@ -72,6 +72,10 @@ namespace DevFM.Application.Services
         {
             return await _pacienteSqlAdapter.UpdatePaciente(paciente);
         }
-
+        public async Task<bool> DeletePacientePorIdAsync(int pacienteId)
+        {
+            return await _pacienteSqlAdapter.DeletePacientePorIdAsync(pacienteId);
+        }
+        
     }
 }

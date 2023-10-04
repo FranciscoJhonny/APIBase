@@ -15,6 +15,8 @@ namespace DevFM.Domain.Models
         public bool Ativo { get; set; }
         public Categoria Categoria { get; set; } = new Categoria();
         public IEnumerable<Telefone> TelefonesCuidador {  get; set; } = Enumerable.Empty<Telefone>();
+
+        public List<Telefone> Telefones { get; set; } = new List<Telefone>();
         public IEnumerable<Atendimento> AtendimentosCuidador { get; set; } = Enumerable.Empty<Atendimento>();
     }
 }
