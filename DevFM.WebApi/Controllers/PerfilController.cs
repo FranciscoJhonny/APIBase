@@ -21,7 +21,7 @@ namespace DevFM.WebApi.Controllers
             _logger = loggerFactory?.CreateLogger<PerfilController>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _PerfilService = PerfilService ?? throw new ArgumentNullException(nameof(PerfilService));
         }
-        [HttpGet("get-lista-Perfil")]
+        [HttpGet("get-lista-perfil")]
         [ProducesResponseType(typeof(PerfilDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

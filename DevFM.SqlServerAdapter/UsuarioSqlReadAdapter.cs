@@ -89,7 +89,8 @@ namespace DevFM.SqlServerAdapter
                                         TokenRecuperacaoSenha ,
                                         DataRecuperacaoSenha FROM Usuario
 	                                    WHERE Email = @login
-	                                    AND Senha = @senha";
+	                                    AND Senha = @senha
+                                        AND Ativo = 1";
 
             return await _connection.QueryFirstOrDefaultAsync<Usuario>(sql, new { login, senha }, commandType: CommandType.Text);
         }
@@ -126,11 +127,22 @@ namespace DevFM.SqlServerAdapter
         }
         public async Task<bool> DeleteUsuarioPorIdAsync(int usuarioId)
         {
-            const string sql = @"UPDATE [dbo].[Usuario]
-                                      SET [Ativo] = false 
+            try
+            {
+                const string sql = @"UPDATE [dbo].[Usuario]
+                                      SET [Ativo] = 0 
                                     WHERE UsuarioId = @UsuarioId";
-            
-            return await _connection.ExecuteScalarAsync<bool>(sql, usuarioId, commandType: CommandType.Text); ;
+
+                await _connection.ExecuteScalarAsync<int>(sql, new { usuarioId }, commandType: CommandType.Text);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+           
         }
     }
 }

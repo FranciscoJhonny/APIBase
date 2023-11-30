@@ -39,11 +39,13 @@ namespace DevFM.Application.Services
             string senhaMD5 = Recursos.ObterHashMD5(senha);
 
             Usuario usuario = await _usuarioSqlAdapter.ObterPorUsuarioSenhaAsync(login, senhaMD5);
-            usuario.Perfil = await _usuarioSqlAdapter.ObterPerfioPorIdAsync(usuario.PerfilId);
+            
 
 
             if (usuario != null)
             {
+                usuario.Perfil = await _usuarioSqlAdapter.ObterPerfioPorIdAsync(usuario.PerfilId);
+
                 UsuarioLogadoVM usuarioLogado = new UsuarioLogadoVM()
                 {
                     UsuarioId = usuario.UsuarioId,

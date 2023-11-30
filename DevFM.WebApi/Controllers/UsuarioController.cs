@@ -163,5 +163,31 @@ namespace DevFM.WebApi.Controllers
                 throw ex;
             }
         }
+
+        /// <summary>
+        /// Editar usuario
+        /// </summary>
+        /// <param name="usuarioDto">Parametro do usuario</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        [Authorize(Roles = "Adminstrador")]
+        [HttpPut("delete-usuario")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeletarUsuario(int usuarioId)
+        {
+            var usuario = await _usuarioService.ObterUsuarioPorIdAsync(usuarioId);
+
+            var response = _mapper.Map<UsuarioDto>(usuario);
+
+            if (response == null)
+                return NotFound();
+
+            var result = await _usuarioService.DeleteUsuarioPorIdAsync(usuarioId);            
+
+            return Ok(result);
+            
+        }
     }
 }
