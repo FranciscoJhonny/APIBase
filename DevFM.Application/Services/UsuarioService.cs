@@ -17,6 +17,7 @@ namespace DevFM.Application.Services
 
         public async Task<IEnumerable<Usuario>> ObterUsuarioAsync()
         {
+            
             return await _usuarioSqlAdapter.ObterUsuarioAsync();
         }
 
@@ -56,6 +57,15 @@ namespace DevFM.Application.Services
 
             return null;
             
+        }
+        public async Task<int> UpdateUsuario(Usuario usuario)
+        {
+            return await _usuarioSqlAdapter.UpdateUsuario(usuario);
+        }
+
+        public async Task<bool> DeleteUsuarioPorIdAsync(int usuarioId)
+        {
+            return await _usuarioSqlAdapter.DeleteUsuarioPorIdAsync(usuarioId);
         }
         public async Task<int> VerificaUsuarioAsync(string email)
         {

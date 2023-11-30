@@ -10,5 +10,7 @@ namespace DevFM.Domain.Services
         Task<int> NewUsuarioAsync(Usuario usuario);
         Task<UsuarioLogadoVM> LoginUsuario(string login, string senha);
         Task<int> VerificaUsuarioAsync(string email);
+        Task<int> UpdateUsuario(Usuario usuario);
+        Task<bool> DeleteUsuarioPorIdAsync(int usuarioId);
     }
 }

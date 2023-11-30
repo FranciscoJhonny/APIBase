@@ -24,27 +24,27 @@ namespace DevFM.SqlServerAdapter
 
         public async Task<IEnumerable<Estado>> ObterEstadoAsync()
         {
-            const string sql = @"SELECT [EstadoId]
-                                       ,[DescricaoEstado]
-                                       ,[DataCriacao]
-                                       ,[DataAlteracao]
-                                       ,[Ativo]
-                                       ,[Sigla]
-                                   FROM [dbo].[Estados]";
+            const string sql = @"SELECT EstadoId
+                                       ,DescricaoEstado
+                                       ,DataCriacao
+                                       ,DataAlteracao
+                                       ,Ativo
+                                       ,Sigla
+                                   FROM Estados";
 
             return await _connection.QueryAsync<Estado>(sql, commandType: CommandType.Text);
         }
 
         public async Task<Estado> ObterEstadoPorIdAsync(int EstadoId)
         {
-            const string sql = @"SELECT [EstadoId]
-                                       ,[DescricaoEstado]
-                                       ,[DataCriacao]
-                                       ,[DataAlteracao]
-                                       ,[Ativo]
-                                       ,[Sigla]
-                                   FROM [dbo].[Estados]
-                                WHERE [EstadoId] = @EstadoId";
+            const string sql = @"SELECT EstadoId
+                                       ,DescricaoEstado
+                                       ,DataCriacao
+                                       ,DataAlteracao
+                                       ,Ativo
+                                       ,Sigla
+                                   FROM Estados
+                                WHERE EstadoId = @EstadoId";
 
             return await _connection.QueryFirstOrDefaultAsync<Estado>(sql, new { EstadoId }, commandType: CommandType.Text);
         }

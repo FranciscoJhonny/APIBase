@@ -24,41 +24,41 @@ namespace DevFM.SqlServerAdapter
 
         public async Task<IEnumerable<Municipio>> ObterMunicipioAsync()
         {
-            const string sql = @"SELECT [MunicipioId]
-                                      ,[EstadoId]
-                                      ,[DescricaoMunicio]
-                                      ,[DataCriacao]
-                                      ,[DataAlteracao]
-                                      ,[Ativo]
-                                   FROM [dbo].[Municipios]";
+            const string sql = @"SELECT MunicipioId
+                                      ,EstadoId
+                                      ,DescricaoMunicio
+                                      ,DataCriacao
+                                      ,DataAlteracao
+                                      ,Ativo
+                                   FROM Municipios";
 
             return await _connection.QueryAsync<Municipio>(sql, commandType: CommandType.Text);
         }
 
         public async Task<Municipio> ObterMunicipioPorIdAsync(int municipioId)
         {
-            const string sql = @"SELECT [MunicipioId]
-                                       ,[EstadoId]
-                                      ,[DescricaoMunicio]
-                                      ,[DataCriacao]
-                                      ,[DataAlteracao]
-                                      ,[Ativo]
-                                   FROM [dbo].[Municipios]
-                                WHERE [MunicipioId] = @MunicipioId";
+            const string sql = @"SELECT MunicipioId
+                                       ,EstadoId
+                                      ,DescricaoMunicio
+                                      ,DataCriacao
+                                      ,DataAlteracao
+                                      ,Ativo
+                                   FROM Municipios
+                                WHERE MunicipioId = @MunicipioId";
 
             return await _connection.QueryFirstOrDefaultAsync<Municipio>(sql, new { municipioId }, commandType: CommandType.Text);
         }
 
         public async Task<IEnumerable<Municipio>> ObterMunicipioPorEstadoIdAsync(int estadoId)
         {
-            const string sql = @"SELECT [MunicipioId]
-                                      ,[EstadoId]
-                                      ,[DescricaoMunicio]
-                                      ,[DataCriacao]
-                                      ,[DataAlteracao]
-                                      ,[Ativo]
-                                   FROM [dbo].[Municipios]
-                                WHERE [EstadoId] = @estadoId";
+            const string sql = @"SELECT MunicipioId
+                                      ,EstadoId
+                                      ,DescricaoMunicio
+                                      ,DataCriacao
+                                      ,DataAlteracao
+                                      ,Ativo
+                                   FROM Municipios
+                                WHERE EstadoId = @estadoId";
 
             return await _connection.QueryAsync<Municipio>(sql, new { estadoId }, commandType: CommandType.Text);
         }

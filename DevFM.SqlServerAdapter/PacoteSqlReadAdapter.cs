@@ -23,39 +23,39 @@ namespace DevFM.SqlServerAdapter
         }
         public async Task<IEnumerable<Pacote>> ObterPacoteAsync()
         {
-            const string sql = @"SELECT [PacoteId]
-                                        ,[Descricao_Pacote] as [DescricaoPacote]
-                                        ,[Valor_Pacote] as [ValorPacote]
-                                        ,[DataCriacao]
-                                        ,[DataAlteracao]
-                                        ,[Ativo]
-                                    FROM [dbo].[Pacotes]
+            const string sql = @"SELECT PacoteId
+                                        ,Descricao_Pacote as DescricaoPacote
+                                        ,Valor_Pacote as ValorPacote
+                                        ,DataCriacao
+                                        ,DataAlteracao
+                                        ,Ativo
+                                    FROM Pacotes
                                  ORDER BY DescricaoPacote";
 
             return await _connection.QueryAsync<Pacote>(sql, commandType: CommandType.Text);
         }
         public async Task<Pacote> ObterPacotePorIdAsync(int pacoteId)
         {
-            const string sql = @"SELECT [PacoteId]
-                                       ,[Descricao_Pacote] as [DescricaoPacote]
-                                        ,[Valor_Pacote] as [ValorPacote]
-                                        ,[DataCriacao]
-                                        ,[DataAlteracao]
-                                        ,[Ativo]
-                                    FROM [dbo].[Pacotes]
-                                WHERE [PacoteId] = @PacoteId";
+            const string sql = @"SELECT PacoteId
+                                       ,Descricao_Pacote as DescricaoPacote
+                                        ,Valor_Pacote as ValorPacote
+                                        ,DataCriacao
+                                        ,DataAlteracao
+                                        ,Ativo
+                                    FROM Pacotes
+                                WHERE PacoteId = @PacoteId";
 
             return await _connection.QueryFirstOrDefaultAsync<Pacote>(sql, new { pacoteId }, commandType: CommandType.Text);
         }
 
         public async Task<int> NewPacoteAsync(Pacote pacote)
         {
-            const string sql = @"INSERT INTO [dbo].[Pacotes]
-                                                   ([Descricao_Pacote]
-                                                   ,[Valor_Pacote]
-                                                   ,[DataCriacao]
-                                                   ,[DataAlteracao]
-                                                   ,[Ativo])
+            const string sql = @"INSERT INTO Pacotes
+                                                   (Descricao_Pacote
+                                                   ,Valor_Pacote
+                                                   ,DataCriacao
+                                                   ,DataAlteracao
+                                                   ,Ativo)
 	                                        	   OUTPUT INSERTED.PacoteId
                                              VALUES
                                                    (@Descricao_Pacote
@@ -69,12 +69,12 @@ namespace DevFM.SqlServerAdapter
 
         public async Task<int> UpdatePacote(Pacote pacote)
         {
-            const string sql = @"UPDATE [dbo].[Pacotes]
-                                          SET [Descricao_Pacote] = @Descricao_Pacote
-                                             ,[Valor_Pacote] = @Valor_Pacote
-                                             ,[DataAlteracao] = GETDATE()
-                                             ,[Ativo] = @Ativo
-                                  WHERE [PacoteId] = @PacoteId";
+            const string sql = @"UPDATE Pacotes
+                                          SET Descricao_Pacote = @Descricao_Pacote
+                                             ,Valor_Pacote = @Valor_Pacote
+                                             ,DataAlteracao = GETDATE()
+                                             ,Ativo = @Ativo
+                                  WHERE PacoteId = @PacoteId";
             return await _connection.ExecuteScalarAsync<int>(sql, pacote, commandType: CommandType.Text);
         }
     }

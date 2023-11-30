@@ -5,35 +5,33 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DevFM.WebApi.Controllers
 {
-    /// <summary>
-	/// Controller Turno
-	/// </summary>
+    
 	[ApiVersion("1.0")]
-    public class TurnoController : ControllerBase
+    public class PerfilController : ControllerBase
     {
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
-        private readonly ITurnoService _turnoService;
+        private readonly IPerfilService _PerfilService;
 
-        public TurnoController(IMapper mapper,
-            ITurnoService turnoService,
+        public PerfilController(IMapper mapper,
+            IPerfilService PerfilService,
             ILoggerFactory loggerFactory)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _logger = loggerFactory?.CreateLogger<TurnoController>() ?? throw new ArgumentNullException(nameof(loggerFactory));
-            _turnoService = turnoService ?? throw new ArgumentNullException(nameof(turnoService));
+            _logger = loggerFactory?.CreateLogger<PerfilController>() ?? throw new ArgumentNullException(nameof(loggerFactory));
+            _PerfilService = PerfilService ?? throw new ArgumentNullException(nameof(PerfilService));
         }
-        [HttpGet("get-lista-turno")]
-        [ProducesResponseType(typeof(TurnoDto), StatusCodes.Status200OK)]
+        [HttpGet("get-lista-Perfil")]
+        [ProducesResponseType(typeof(PerfilDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetTurnoAsync()
+        public async Task<IActionResult> GetPerfilAsync()
         {
             try
             {
-                var turno = await _turnoService.ObterTurnoAsync();
+                var Perfil = await _PerfilService.ObterPerfilAsync();
 
-                var response = _mapper.Map<IEnumerable<TurnoDto>>(turno);
+                var response = _mapper.Map<IEnumerable<PerfilDto>>(Perfil);
 
                 if (response == null)
                     return NotFound();

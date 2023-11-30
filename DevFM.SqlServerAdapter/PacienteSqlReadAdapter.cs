@@ -23,9 +23,9 @@ namespace DevFM.SqlServerAdapter
         }
         public async Task<IEnumerable<Paciente>> ObterPacienteAsync()
         {
-            const string sql = @"SELECT * FROM dbo.Pacientes p
-                                 LEFT JOIN dbo.Paciente_Telefones pt ON pt.PacienteId = p.PacienteId
-                                 LEFT JOIN dbo.Telefones t ON t.TelefoneId = pt.TelefoneId";
+            const string sql = @"SELECT * FROM Pacientes p
+                                 LEFT JOIN Paciente_Telefones pt ON pt.PacienteId = p.PacienteId
+                                 LEFT JOIN Telefones t ON t.TelefoneId = pt.TelefoneId";
 
             var retorno = await _connection.QueryAsync<Paciente, Telefone, Paciente>(sql,
                 (paciente, paicienteTelefone) =>
@@ -46,9 +46,9 @@ namespace DevFM.SqlServerAdapter
         }
         public async Task<IEnumerable<Paciente>> ObterPacienteParametroAsync(int filtro, string nome)
         {
-            const string sql = @"SELECT * FROM dbo.Pacientes p
-                                 LEFT JOIN dbo.Paciente_Telefones pt ON pt.PacienteId = p.PacienteId
-                                 LEFT JOIN dbo.Telefones t ON t.TelefoneId = pt.TelefoneId
+            const string sql = @"SELECT * FROM Pacientes p
+                                 LEFT JOIN Paciente_Telefones pt ON pt.PacienteId = p.PacienteId
+                                 LEFT JOIN Telefones t ON t.TelefoneId = pt.TelefoneId
                                         WHERE   1 = 1
                                   AND (@filtro != 1  OR p.NomePaciente LIKE ''+ @nome + '%')
                                   AND (@filtro != 2 OR p.NomePaciente LIKE '%'+ @nome +'%')";
@@ -73,53 +73,53 @@ namespace DevFM.SqlServerAdapter
         }
         public async Task<Paciente> ObterPacientePorIdAsync(int pacienteId)
         {
-            const string sql = @"SELECT [PacienteId]
-                                        ,[MunicipioId]
-                                        ,[NomePaciente]
-                                        ,[DataNascimento]
-                                        ,[DataInicio]
-                                        ,[DataRenovacao]
-                                        ,[DescricaoPaciente]
-                                        ,[Observacao]
-                                        ,[Particulariedade]
-                                        ,[Jornada]
-                                        ,[DataCriacao]
-                                        ,[DataAlteracao]
-                                        ,[Ativo]
-                                    FROM [dbo].[Pacientes]
-                                WHERE [PacienteId] = @PacienteId";
+            const string sql = @"SELECT PacienteId
+                                        ,MunicipioId
+                                        ,NomePaciente
+                                        ,DataNascimento
+                                        ,DataInicio
+                                        ,DataRenovacao
+                                        ,DescricaoPaciente
+                                        ,Observacao
+                                        ,Particulariedade
+                                        ,Jornada
+                                        ,DataCriacao
+                                        ,DataAlteracao
+                                        ,Ativo
+                                    FROM Pacientes
+                                WHERE PacienteId = @PacienteId";
 
             return await _connection.QueryFirstOrDefaultAsync<Paciente>(sql, new { pacienteId }, commandType: CommandType.Text);
         }
         public async Task<IEnumerable<Telefone>> ObterTelefonesPacienteAsync(int pacienteId)
         {
-            const string sql = @"SELECT t.TelefoneId,t.NumeroTelefone, t.TipoTelefoneId,tt.DescricaoTipoTelefone FROM dbo.Paciente_Telefones pa
-                                        JOIN dbo.Telefones t ON t.TelefoneId = pa.TelefoneId
-                                        JOIN dbo.TipoTelefones tt ON tt.TipoTelefoneId = t.TipoTelefoneId
+            const string sql = @"SELECT t.TelefoneId,t.NumeroTelefone, t.TipoTelefoneId,tt.DescricaoTipoTelefone FROM Paciente_Telefones pa
+                                        JOIN Telefones t ON t.TelefoneId = pa.TelefoneId
+                                        JOIN TipoTelefones tt ON tt.TipoTelefoneId = t.TipoTelefoneId
                                         WHERE pa.PacienteId = @PacienteId";
 
             return await _connection.QueryAsync<Telefone>(sql, new { pacienteId }, commandType: CommandType.Text);
         }
         public async Task<IEnumerable<Endereco>> ObterEnderecoPacienteAsync(int pacienteId)
         {
-            const string sql = @"SELECT e.EnderecoId,e.Logradouro,e.Numero,e.Complemento,e.Cep,e.Bairro FROM dbo.Paciente_Enderecos pe
-                                        JOIN dbo.Enderecos e ON e.EnderecoId = pe.EnderecoId
+            const string sql = @"SELECT e.EnderecoId,e.Logradouro,e.Numero,e.Complemento,e.Cep,e.Bairro FROM Paciente_Enderecos pe
+                                        JOIN Enderecos e ON e.EnderecoId = pe.EnderecoId
                                         WHERE pe.PacienteId = @PacienteId";
 
             return await _connection.QueryAsync<Endereco>(sql, new { pacienteId }, commandType: CommandType.Text);
         }
         public async Task<IEnumerable<Responsavel>> ObterResponsavelPacienteAsync(int pacienteId)
         {
-            const string sql = @"SELECT e.ResponsavelId,e.PacienteId,e.NomeResponsavel FROM dbo.Responsaveis e
+            const string sql = @"SELECT e.ResponsavelId,e.PacienteId,e.NomeResponsavel FROM Responsaveis e
                                             WHERE e.PacienteId = @PacienteId";
 
             return await _connection.QueryAsync<Responsavel>(sql, new { pacienteId }, commandType: CommandType.Text);
         }
         public async Task<IEnumerable<Telefone>> ObterTelefoneResponsavelAsync(int responsavelId)
         {
-            const string sql = @"SELECT t.TelefoneId,t.NumeroTelefone, t.TipoTelefoneId,tt.DescricaoTipoTelefone FROM dbo.Responsavel_Telefones rt
-                                    JOIN dbo.Telefones t ON t.TelefoneId = rt.TelefoneId
-                                    JOIN dbo.TipoTelefones tt ON tt.TipoTelefoneId = t.TipoTelefoneId
+            const string sql = @"SELECT t.TelefoneId,t.NumeroTelefone, t.TipoTelefoneId,tt.DescricaoTipoTelefone FROM Responsavel_Telefones rt
+                                    JOIN Telefones t ON t.TelefoneId = rt.TelefoneId
+                                    JOIN TipoTelefones tt ON tt.TipoTelefoneId = t.TipoTelefoneId
                                     WHERE rt.ResponsavelId = @ResponsavelId";
 
             return await _connection.QueryAsync<Telefone>(sql, new { responsavelId }, commandType: CommandType.Text);
@@ -135,10 +135,10 @@ namespace DevFM.SqlServerAdapter
                                           a.ProfissionalCor,
                                   		  a.DataInicio,
 										  ca.DescricaoCategoria
-                                  FROM    dbo.Atendimentos a
-                                          JOIN dbo.Cuidadores c ON c.CuidadorId = a.CuidadorId
-                                          JOIN dbo.Turnos t ON t.TurnoId = a.TurnoId
-										  JOIN dbo.Categorias ca ON ca.CategoriaId = c.CategoriaId
+                                  FROM    Atendimentos a
+                                          JOIN Cuidadores c ON c.CuidadorId = a.CuidadorId
+                                          JOIN Turnos t ON t.TurnoId = a.TurnoId
+										  JOIN Categorias ca ON ca.CategoriaId = c.CategoriaId
                                   WHERE   a.PacienteId  = @PacienteId";
 
             return await _connection.QueryAsync<Atendimento>(sql, new { pacienteId }, commandType: CommandType.Text);
@@ -149,9 +149,9 @@ namespace DevFM.SqlServerAdapter
                                          t.NumeroTelefone ,
                                          t.TipoTelefoneId ,
                                          tt.DescricaoTipoTelefone
-                                 FROM    dbo.Cuidador_Telefones ct
-                                         JOIN dbo.Telefones t ON t.TelefoneId = ct.TelefoneId
-                                         JOIN dbo.TipoTelefones tt ON tt.TipoTelefoneId = t.TipoTelefoneId
+                                 FROM    Cuidador_Telefones ct
+                                         JOIN Telefones t ON t.TelefoneId = ct.TelefoneId
+                                         JOIN TipoTelefones tt ON tt.TipoTelefoneId = t.TipoTelefoneId
                                  WHERE   ct.CuidadorId = @CuidadorId;";
 
             return await _connection.QueryAsync<Telefone>(sql, new { cuidadorId }, commandType: CommandType.Text);
@@ -173,8 +173,8 @@ namespace DevFM.SqlServerAdapter
                                           pp.ValorDesconto ,
                                           pp.ValorAcrescimo ,
                                           pp.TaxaAdminstrativa ,
-                                          pp.Ativo FROM dbo.Paciente_Pacotes pp
-                                   JOIN dbo.Pacotes p ON p.PacoteId = pp.PacoteId
+                                          pp.Ativo FROM Paciente_Pacotes pp
+                                   JOIN Pacotes p ON p.PacoteId = pp.PacoteId
                                    WHERE pp.PacienteId = @PacienteId";
 
             return await _connection.QueryAsync<Paciente_Pacote>(sql, new { pacienteId }, commandType: CommandType.Text);
@@ -182,18 +182,18 @@ namespace DevFM.SqlServerAdapter
 
         public async Task<int> NewPacienteAsync(Paciente paciente)
         {
-            const string sql = @"INSERT INTO [dbo].[Pacientes]
-                                                   ([NomePaciente]
-                                                  ,[DataNascimento]
-                                                  ,[DataInicio]
-                                                  ,[DataRenovacao]
-                                                  ,[DescricaoPaciente]
-                                                  ,[Observacao]
-                                                  ,[Particulariedade]
-                                                  ,[Jornada]
-                                                  ,[DataCriacao]
-                                                  ,[DataAlteracao]
-                                                  ,[Ativo])
+            const string sql = @"INSERT INTO Pacientes
+                                                   (NomePaciente
+                                                  ,DataNascimento
+                                                  ,DataInicio
+                                                  ,DataRenovacao
+                                                  ,DescricaoPaciente
+                                                  ,Observacao
+                                                  ,Particulariedade
+                                                  ,Jornada
+                                                  ,DataCriacao
+                                                  ,DataAlteracao
+                                                  ,Ativo)
 	                                        	   OUTPUT INSERTED.PacienteId
                                             VALUES
                                                   (@NomePaciente
@@ -212,7 +212,7 @@ namespace DevFM.SqlServerAdapter
 
             foreach (var telefone in paciente.TelefonesPacientes)
             {
-                const string sql_telefone = @"INSERT dbo.Telefones
+                const string sql_telefone = @"INSERT Telefones
                                                        ( NumeroTelefone ,
                                                          TipoTelefoneId ,
                                                          DataCriacao ,
@@ -226,11 +226,11 @@ namespace DevFM.SqlServerAdapter
                 int telefoneId = await _connection.ExecuteScalarAsync<int>(sql_telefone, telefone, commandType: CommandType.Text);
 
 
-                const string sql_paciente_telefone = @"INSERT INTO [dbo].[Paciente_Telefones]
-                                                                           ([PacienteId]
-                                                                           ,[TelefoneId]
-                                                                           ,[DataCriacao]
-                                                                           ,[DataAlteracao])
+                const string sql_paciente_telefone = @"INSERT INTO Paciente_Telefones
+                                                                           (PacienteId
+                                                                           ,TelefoneId
+                                                                           ,DataCriacao
+                                                                           ,DataAlteracao)
                                                                      VALUES
                                                                            (@PacienteId
                                                                            ,@TelefoneId
@@ -243,15 +243,15 @@ namespace DevFM.SqlServerAdapter
 
             foreach (var endereco in paciente.EnderecosPaciente)
             {
-                const string sql_endereco = @"INSERT INTO [dbo].[Enderecos]
-                                                                 ([Logradouro]
-                                                                 ,[Numero]
-                                                                 ,[Complemento]
-                                                                 ,[Cep]
-                                                                 ,[Bairro]
-                                                                 ,[DataCriacao]
-                                                                 ,[DataAlteracao]
-                                                                 ,[Ativo])
+                const string sql_endereco = @"INSERT INTO Enderecos
+                                                                 (Logradouro
+                                                                 ,Numero
+                                                                 ,Complemento
+                                                                 ,Cep
+                                                                 ,Bairro
+                                                                 ,DataCriacao
+                                                                 ,DataAlteracao
+                                                                 ,Ativo)
 	                                                       	   OUTPUT INSERTED.EnderecoId
                                                            VALUES
                                                                  (@Logradouro
@@ -266,12 +266,12 @@ namespace DevFM.SqlServerAdapter
                 int enderecoId = await _connection.ExecuteScalarAsync<int>(sql_endereco, endereco, commandType: CommandType.Text);
 
 
-                const string sql_paciente_endereco = @"INSERT INTO [dbo].[Paciente_Enderecos]
-                                                                              ([PacienteId]
-                                                                              ,[EnderecoId]
-                                                                              ,[DataCriacao]
-                                                                              ,[DataAlteracao]
-                                                                              ,[Ativo])
+                const string sql_paciente_endereco = @"INSERT INTO Paciente_Enderecos
+                                                                              (PacienteId
+                                                                              ,EnderecoId
+                                                                              ,DataCriacao
+                                                                              ,DataAlteracao
+                                                                              ,Ativo)
                                                                         VALUES
                                                                               (@PacienteId
                                                                               ,@EnderecoId
@@ -285,12 +285,12 @@ namespace DevFM.SqlServerAdapter
             foreach (var responsavel in paciente.RespensaveisPacientes)
             {
                 var nomeResponsavel = responsavel.NomeResponsavel;
-                const string sql_responsavel = @"INSERT INTO [dbo].[Responsaveis]
-                                                                  ([PacienteId]
-                                                                  ,[NomeResponsavel]
-                                                                  ,[DataCriacao]
-                                                                  ,[DataAlteracao]
-                                                                  ,[Ativo])
+                const string sql_responsavel = @"INSERT INTO Responsaveis
+                                                                  (PacienteId
+                                                                  ,NomeResponsavel
+                                                                  ,DataCriacao
+                                                                  ,DataAlteracao
+                                                                  ,Ativo)
                                                             OUTPUT INSERTED.ResponsavelId
                                                             VALUES
                                                                   (@PacienteId 
@@ -304,7 +304,7 @@ namespace DevFM.SqlServerAdapter
 
                 foreach (var telefoneresponsavel in responsavel.TelefonesResponsaveis)
                 {
-                    const string sql_telefone_responsavel = @"INSERT dbo.Telefones
+                    const string sql_telefone_responsavel = @"INSERT Telefones
                                                        ( NumeroTelefone ,
                                                          TipoTelefoneId ,
                                                          DataCriacao ,
@@ -318,11 +318,11 @@ namespace DevFM.SqlServerAdapter
                     int telefoneId = await _connection.ExecuteScalarAsync<int>(sql_telefone_responsavel, telefoneresponsavel, commandType: CommandType.Text);
 
 
-                    const string sql_paciente_telefone = @"INSERT INTO [dbo].[Responsavel_Telefones]
-                                                                                      ([TelefoneId]
-                                                                                      ,[ResponsavelId]
-                                                                                      ,[DataCriacao]
-                                                                                      ,[DataAlteracao])
+                    const string sql_paciente_telefone = @"INSERT INTO Responsavel_Telefones
+                                                                                      (TelefoneId
+                                                                                      ,ResponsavelId
+                                                                                      ,DataCriacao
+                                                                                      ,DataAlteracao)
                                                                                 VALUES
                                                                                       (@TelefoneId
                                                                                       ,@ResponsavelId
@@ -336,15 +336,15 @@ namespace DevFM.SqlServerAdapter
             foreach (var atendimento in paciente.AtendimentosPacientes)
             {
                 atendimento.PacienteId = pacienteId;
-                const string sql_atendimento = @"INSERT INTO [dbo].[Atendimentos]
-                                                                   ([PacienteId]
-                                                                   ,[CuidadorId]
-                                                                   ,[TurnoId]
-                                                                   ,[ProfissionalCor]
-                                                                   ,[DataInicio]
-                                                                   ,[DataCriacao]
-                                                                   ,[DataAlteracao]
-                                                                   ,[Ativo])
+                const string sql_atendimento = @"INSERT INTO Atendimentos
+                                                                   (PacienteId
+                                                                   ,CuidadorId
+                                                                   ,TurnoId
+                                                                   ,ProfissionalCor
+                                                                   ,DataInicio
+                                                                   ,DataCriacao
+                                                                   ,DataAlteracao
+                                                                   ,Ativo)
                                                              VALUES
                                                                    (@PacienteId
                                                                    ,@CuidadorId
@@ -360,23 +360,23 @@ namespace DevFM.SqlServerAdapter
             foreach (var paciente_Pacote in paciente.Paciente_Pacotes)
             {
                 paciente_Pacote.PacienteId = pacienteId;
-                const string sql_paciente_pacote = @"INSERT INTO [dbo].[Paciente_Pacotes]
-                                                                     ([PacienteId]
-                                                                      ,[PacoteId]
-                                                                      ,[PacoteMensal]
-                                                                      ,[ValorPacote]
-                                                                      ,[DiaPlantao]
-                                                                      ,[ValorPlantaoPacote]
-                                                                      ,[SalarioCuidador]
-                                                                      ,[SalarioDiaCuidador]
-                                                                      ,[ValorPlantaoCuidador]
-                                                                      ,[Observacao]
-                                                                      ,[ValorDesconto]
-                                                                      ,[ValorAcrescimo]
-                                                                      ,[TaxaAdminstrativa]
-                                                                      ,[DataCriacao]
-                                                                      ,[DataAlteracao]
-                                                                      ,[Ativo])
+                const string sql_paciente_pacote = @"INSERT INTO Paciente_Pacotes
+                                                                     (PacienteId
+                                                                      ,PacoteId
+                                                                      ,PacoteMensal
+                                                                      ,ValorPacote
+                                                                      ,DiaPlantao
+                                                                      ,ValorPlantaoPacote
+                                                                      ,SalarioCuidador
+                                                                      ,SalarioDiaCuidador
+                                                                      ,ValorPlantaoCuidador
+                                                                      ,Observacao
+                                                                      ,ValorDesconto
+                                                                      ,ValorAcrescimo
+                                                                      ,TaxaAdminstrativa
+                                                                      ,DataCriacao
+                                                                      ,DataAlteracao
+                                                                      ,Ativo)
                                                                  VALUES
                                                                        (@PacienteId
                                                                        ,@PacoteId
@@ -404,55 +404,55 @@ namespace DevFM.SqlServerAdapter
         public async Task<int> UpdatePaciente(Paciente paciente)
         {
 
-            const string sql_Paciente = @"UPDATE [dbo].[Pacientes]
-                                   SET [NomePaciente] = @NomePaciente
-                                      ,[DataNascimento] = @DataNascimento
-                                      ,[DataInicio] = @DataInicio
-                                      ,[DataRenovacao] = @DataRenovacao
-                                      ,[DescricaoPaciente] = @DescricaoPaciente
-                                      ,[Observacao] = @Observacao
-                                      ,[Particulariedade] = @Particulariedade
-                                      ,[Jornada] = @Jornada      
-                                      ,[DataAlteracao] = GETDATE()
-                                      ,[Ativo] = @Ativo
-                                 WHERE [PacienteId] = @PacienteId";
+            const string sql_Paciente = @"UPDATE Pacientes
+                                   SET NomePaciente = @NomePaciente
+                                      ,DataNascimento = @DataNascimento
+                                      ,DataInicio = @DataInicio
+                                      ,DataRenovacao = @DataRenovacao
+                                      ,DescricaoPaciente = @DescricaoPaciente
+                                      ,Observacao = @Observacao
+                                      ,Particulariedade = @Particulariedade
+                                      ,Jornada = @Jornada      
+                                      ,DataAlteracao = GETDATE()
+                                      ,Ativo = @Ativo
+                                 WHERE PacienteId = @PacienteId";
 
             await _connection.ExecuteScalarAsync<int>(sql_Paciente, paciente, commandType: CommandType.Text);
 
 
-            const string sql_telefoneId = @"SELECT	TelefoneId FROM dbo.Paciente_Telefones WHERE PacienteId = @PacienteId";
+            const string sql_telefoneId = @"SELECT	TelefoneId FROM Paciente_Telefones WHERE PacienteId = @PacienteId";
 
 
             var listTelefoneId = await _connection.QueryAsync<int>(sql_telefoneId, new { paciente.PacienteId}, commandType: CommandType.Text);
 
-            const string sql_delete_paciente_telefone = @"DELETE FROM dbo.Paciente_Telefones WHERE PacienteId = @PacienteId";
+            const string sql_delete_paciente_telefone = @"DELETE FROM Paciente_Telefones WHERE PacienteId = @PacienteId";
 
             var id = await _connection.ExecuteScalarAsync<int>(sql_delete_paciente_telefone, new { paciente.PacienteId }, commandType: CommandType.Text);
 
 
             foreach (var telefoneId in listTelefoneId)
             {
-                const string sql_delete_telefone = @"DELETE FROM dbo.Telefones WHERE TelefoneId = @TelefoneId";
+                const string sql_delete_telefone = @"DELETE FROM Telefones WHERE TelefoneId = @TelefoneId";
                 await _connection.ExecuteScalarAsync<int>(sql_delete_telefone, new { telefoneId }, commandType: CommandType.Text);
             }
 
-            const string sql_enderecoId = @"SELECT EnderecoId FROM dbo.Paciente_Enderecos WHERE PacienteId = @PacienteId";
+            const string sql_enderecoId = @"SELECT EnderecoId FROM Paciente_Enderecos WHERE PacienteId = @PacienteId";
 
 
             var listEndereco = await _connection.QueryAsync<int>(sql_enderecoId, new { paciente.PacienteId }, commandType: CommandType.Text);
 
-            const string sql_delete_paciente_endereco = @"DELETE FROM dbo.Paciente_Enderecos WHERE PacienteId = @PacienteId";
+            const string sql_delete_paciente_endereco = @"DELETE FROM Paciente_Enderecos WHERE PacienteId = @PacienteId";
 
             var paciente_endereco_id = await _connection.ExecuteScalarAsync<int>(sql_delete_paciente_endereco, new { paciente.PacienteId }, commandType: CommandType.Text);
 
 
             foreach (var enderecoId in listEndereco)
             {
-                const string sql_delete_endereco = @"DELETE FROM dbo.Enderecos WHERE EnderecoId = @EnderecoId";
+                const string sql_delete_endereco = @"DELETE FROM Enderecos WHERE EnderecoId = @EnderecoId";
                 await _connection.ExecuteScalarAsync<int>(sql_delete_endereco, new { enderecoId }, commandType: CommandType.Text);
             }
 
-            const string sql_responsavelId = @"SELECT ResponsavelId FROM dbo.Responsaveis WHERE PacienteId = @PacienteId";
+            const string sql_responsavelId = @"SELECT ResponsavelId FROM Responsaveis WHERE PacienteId = @PacienteId";
 
 
             var listaresponsavelId = await _connection.QueryAsync<int>(sql_responsavelId, new { paciente.PacienteId }, commandType: CommandType.Text);
@@ -460,39 +460,39 @@ namespace DevFM.SqlServerAdapter
             foreach (var responsavel_Id in listaresponsavelId)
             {                
 
-                const string sql_responsavel_telefone_Id = @"SELECT TelefoneId  FROM dbo.Responsavel_Telefones WHERE ResponsavelId = @responsavel_Id";
+                const string sql_responsavel_telefone_Id = @"SELECT TelefoneId  FROM Responsavel_Telefones WHERE ResponsavelId = @responsavel_Id";
 
 
                 var listresponsavel_telefonesId = await _connection.QueryAsync<int>(sql_responsavel_telefone_Id, new { responsavel_Id }, commandType: CommandType.Text);
 
 
-                const string sql_delete_responsavel_telefone = @"DELETE FROM dbo.Responsavel_Telefones WHERE ResponsavelId = @responsavel_Id";
+                const string sql_delete_responsavel_telefone = @"DELETE FROM Responsavel_Telefones WHERE ResponsavelId = @responsavel_Id";
 
                 await _connection.ExecuteScalarAsync<int>(sql_delete_responsavel_telefone, new { responsavel_Id }, commandType: CommandType.Text);
 
                 foreach (var endereco_telefone_Id in listresponsavel_telefonesId)
                 {
-                    const string sql_delete_telefone_responsavel = @"DELETE FROM dbo.Telefones WHERE TelefoneId = @endereco_telefone_Id";
+                    const string sql_delete_telefone_responsavel = @"DELETE FROM Telefones WHERE TelefoneId = @endereco_telefone_Id";
                     await _connection.ExecuteScalarAsync<int>(sql_delete_telefone_responsavel, new { endereco_telefone_Id }, commandType: CommandType.Text);
                 }
 
-                const string sql_delete_responsavel = @"DELETE FROM dbo.Responsaveis WHERE ResponsavelId = @responsavel_Id";
+                const string sql_delete_responsavel = @"DELETE FROM Responsaveis WHERE ResponsavelId = @responsavel_Id";
                 await _connection.ExecuteScalarAsync<int>(sql_delete_responsavel, new { responsavel_Id }, commandType: CommandType.Text);
             }
 
            
-            const string sql_delete_paciente_pacote = @"DELETE FROM dbo.Paciente_Pacotes WHERE PacienteId = @PacienteId";
+            const string sql_delete_paciente_pacote = @"DELETE FROM Paciente_Pacotes WHERE PacienteId = @PacienteId";
 
             var paciente_pacote_id = await _connection.ExecuteScalarAsync<int>(sql_delete_paciente_pacote, new { paciente.PacienteId }, commandType: CommandType.Text);
 
-            const string sql_delete_atendimento = @"DELETE FROM dbo.Atendimentos WHERE PacienteId = @PacienteId";
+            const string sql_delete_atendimento = @"DELETE FROM Atendimentos WHERE PacienteId = @PacienteId";
 
             var paciente_atendiemento_id = await _connection.ExecuteScalarAsync<int>(sql_delete_atendimento, new { paciente.PacienteId }, commandType: CommandType.Text);
 
 
             foreach (var telefone in paciente.TelefonesPacientes)
             {
-                const string sql_telefone = @"INSERT dbo.Telefones
+                const string sql_telefone = @"INSERT Telefones
                                                        ( NumeroTelefone ,
                                                          TipoTelefoneId ,
                                                          DataCriacao ,
@@ -506,11 +506,11 @@ namespace DevFM.SqlServerAdapter
                 int telefoneId = await _connection.ExecuteScalarAsync<int>(sql_telefone, telefone, commandType: CommandType.Text);
 
 
-                const string sql_paciente_telefone = @"INSERT INTO [dbo].[Paciente_Telefones]
-                                                                           ([PacienteId]
-                                                                           ,[TelefoneId]
-                                                                           ,[DataCriacao]
-                                                                           ,[DataAlteracao])
+                const string sql_paciente_telefone = @"INSERT INTO Paciente_Telefones
+                                                                           (PacienteId
+                                                                           ,TelefoneId
+                                                                           ,DataCriacao
+                                                                           ,DataAlteracao)
                                                                      VALUES
                                                                            (@PacienteId
                                                                            ,@TelefoneId
@@ -523,15 +523,15 @@ namespace DevFM.SqlServerAdapter
 
             foreach (var endereco in paciente.EnderecosPaciente)
             {
-                const string sql_endereco = @"INSERT INTO [dbo].[Enderecos]
-                                                                 ([Logradouro]
-                                                                 ,[Numero]
-                                                                 ,[Complemento]
-                                                                 ,[Cep]
-                                                                 ,[Bairro]
-                                                                 ,[DataCriacao]
-                                                                 ,[DataAlteracao]
-                                                                 ,[Ativo])
+                const string sql_endereco = @"INSERT INTO Enderecos
+                                                                 (Logradouro
+                                                                 ,Numero
+                                                                 ,Complemento
+                                                                 ,Cep
+                                                                 ,Bairro
+                                                                 ,DataCriacao
+                                                                 ,DataAlteracao
+                                                                 ,Ativo)
 	                                                       	   OUTPUT INSERTED.EnderecoId
                                                            VALUES
                                                                  (@Logradouro
@@ -546,12 +546,12 @@ namespace DevFM.SqlServerAdapter
                 int enderecoId = await _connection.ExecuteScalarAsync<int>(sql_endereco, endereco, commandType: CommandType.Text);
 
 
-                const string sql_paciente_endereco = @"INSERT INTO [dbo].[Paciente_Enderecos]
-                                                                              ([PacienteId]
-                                                                              ,[EnderecoId]
-                                                                              ,[DataCriacao]
-                                                                              ,[DataAlteracao]
-                                                                              ,[Ativo])
+                const string sql_paciente_endereco = @"INSERT INTO Paciente_Enderecos
+                                                                              (PacienteId
+                                                                              ,EnderecoId
+                                                                              ,DataCriacao
+                                                                              ,DataAlteracao
+                                                                              ,Ativo)
                                                                         VALUES
                                                                               (@PacienteId
                                                                               ,@EnderecoId
@@ -565,12 +565,12 @@ namespace DevFM.SqlServerAdapter
             foreach (var responsavel in paciente.RespensaveisPacientes)
             {
                 var nomeResponsavel = responsavel.NomeResponsavel;
-                const string sql_responsavel = @"INSERT INTO [dbo].[Responsaveis]
-                                                                  ([PacienteId]
-                                                                  ,[NomeResponsavel]
-                                                                  ,[DataCriacao]
-                                                                  ,[DataAlteracao]
-                                                                  ,[Ativo])
+                const string sql_responsavel = @"INSERT INTO Responsaveis
+                                                                  (PacienteId
+                                                                  ,NomeResponsavel
+                                                                  ,DataCriacao
+                                                                  ,DataAlteracao
+                                                                  ,Ativo)
                                                             OUTPUT INSERTED.ResponsavelId
                                                             VALUES
                                                                   (@PacienteId 
@@ -584,7 +584,7 @@ namespace DevFM.SqlServerAdapter
 
                 foreach (var telefoneresponsavel in responsavel.TelefonesResponsaveis)
                 {
-                    const string sql_telefone_responsavel = @"INSERT dbo.Telefones
+                    const string sql_telefone_responsavel = @"INSERT Telefones
                                                        ( NumeroTelefone ,
                                                          TipoTelefoneId ,
                                                          DataCriacao ,
@@ -598,11 +598,11 @@ namespace DevFM.SqlServerAdapter
                     int telefoneId = await _connection.ExecuteScalarAsync<int>(sql_telefone_responsavel, telefoneresponsavel, commandType: CommandType.Text);
 
 
-                    const string sql_paciente_telefone = @"INSERT INTO [dbo].[Responsavel_Telefones]
-                                                                                      ([TelefoneId]
-                                                                                      ,[ResponsavelId]
-                                                                                      ,[DataCriacao]
-                                                                                      ,[DataAlteracao])
+                    const string sql_paciente_telefone = @"INSERT INTO Responsavel_Telefones
+                                                                                      (TelefoneId
+                                                                                      ,ResponsavelId
+                                                                                      ,DataCriacao
+                                                                                      ,DataAlteracao)
                                                                                 VALUES
                                                                                       (@TelefoneId
                                                                                       ,@ResponsavelId
@@ -616,15 +616,15 @@ namespace DevFM.SqlServerAdapter
             foreach (var atendimento in paciente.AtendimentosPacientes)
             {
                 atendimento.PacienteId = paciente.PacienteId;
-                const string sql_atendimento = @"INSERT INTO [dbo].[Atendimentos]
-                                                                   ([PacienteId]
-                                                                   ,[CuidadorId]
-                                                                   ,[TurnoId]
-                                                                   ,[ProfissionalCor]
-                                                                   ,[DataInicio]
-                                                                   ,[DataCriacao]
-                                                                   ,[DataAlteracao]
-                                                                   ,[Ativo])
+                const string sql_atendimento = @"INSERT INTO Atendimentos
+                                                                   (PacienteId
+                                                                   ,CuidadorId
+                                                                   ,TurnoId
+                                                                   ,ProfissionalCor
+                                                                   ,DataInicio
+                                                                   ,DataCriacao
+                                                                   ,DataAlteracao
+                                                                   ,Ativo)
                                                              VALUES
                                                                    (@PacienteId
                                                                    ,@CuidadorId
@@ -640,23 +640,23 @@ namespace DevFM.SqlServerAdapter
             foreach (var paciente_Pacote in paciente.Paciente_Pacotes)
             {
                 paciente_Pacote.PacienteId = paciente.PacienteId;
-                const string sql_paciente_pacote = @"INSERT INTO [dbo].[Paciente_Pacotes]
-                                                                     ([PacienteId]
-                                                                      ,[PacoteId]
-                                                                      ,[PacoteMensal]
-                                                                      ,[ValorPacote]
-                                                                      ,[DiaPlantao]
-                                                                      ,[ValorPlantaoPacote]
-                                                                      ,[SalarioCuidador]
-                                                                      ,[SalarioDiaCuidador]
-                                                                      ,[ValorPlantaoCuidador]
-                                                                      ,[Observacao]
-                                                                      ,[ValorDesconto]
-                                                                      ,[ValorAcrescimo]
-                                                                      ,[TaxaAdminstrativa]
-                                                                      ,[DataCriacao]
-                                                                      ,[DataAlteracao]
-                                                                      ,[Ativo])
+                const string sql_paciente_pacote = @"INSERT INTO Paciente_Pacotes
+                                                                     (PacienteId
+                                                                      ,PacoteId
+                                                                      ,PacoteMensal
+                                                                      ,ValorPacote
+                                                                      ,DiaPlantao
+                                                                      ,ValorPlantaoPacote
+                                                                      ,SalarioCuidador
+                                                                      ,SalarioDiaCuidador
+                                                                      ,ValorPlantaoCuidador
+                                                                      ,Observacao
+                                                                      ,ValorDesconto
+                                                                      ,ValorAcrescimo
+                                                                      ,TaxaAdminstrativa
+                                                                      ,DataCriacao
+                                                                      ,DataAlteracao
+                                                                      ,Ativo)
                                                                  VALUES
                                                                        (@PacienteId
                                                                        ,@PacoteId
@@ -687,39 +687,39 @@ namespace DevFM.SqlServerAdapter
         {
            
 
-            const string sql_telefoneId = @"SELECT	TelefoneId FROM dbo.Paciente_Telefones WHERE PacienteId = @PacienteId";
+            const string sql_telefoneId = @"SELECT	TelefoneId FROM Paciente_Telefones WHERE PacienteId = @PacienteId";
 
 
             var listTelefoneId = await _connection.QueryAsync<int>(sql_telefoneId, new { pacienteId }, commandType: CommandType.Text);
 
-            const string sql_delete_paciente_telefone = @"DELETE FROM dbo.Paciente_Telefones WHERE PacienteId = @PacienteId";
+            const string sql_delete_paciente_telefone = @"DELETE FROM Paciente_Telefones WHERE PacienteId = @PacienteId";
 
             var id = await _connection.ExecuteScalarAsync<int>(sql_delete_paciente_telefone, new { pacienteId }, commandType: CommandType.Text);
 
 
             foreach (var telefoneId in listTelefoneId)
             {
-                const string sql_delete_telefone = @"DELETE FROM dbo.Telefones WHERE TelefoneId = @TelefoneId";
+                const string sql_delete_telefone = @"DELETE FROM Telefones WHERE TelefoneId = @TelefoneId";
                 await _connection.ExecuteScalarAsync<int>(sql_delete_telefone, new { telefoneId }, commandType: CommandType.Text);
             }
 
-            const string sql_enderecoId = @"SELECT EnderecoId FROM dbo.Paciente_Enderecos WHERE PacienteId = @PacienteId";
+            const string sql_enderecoId = @"SELECT EnderecoId FROM Paciente_Enderecos WHERE PacienteId = @PacienteId";
 
 
             var listEndereco = await _connection.QueryAsync<int>(sql_enderecoId, new { pacienteId }, commandType: CommandType.Text);
 
-            const string sql_delete_paciente_endereco = @"DELETE FROM dbo.Paciente_Enderecos WHERE PacienteId = @PacienteId";
+            const string sql_delete_paciente_endereco = @"DELETE FROM Paciente_Enderecos WHERE PacienteId = @PacienteId";
 
             var paciente_endereco_id = await _connection.ExecuteScalarAsync<int>(sql_delete_paciente_endereco, new { pacienteId }, commandType: CommandType.Text);
 
 
             foreach (var enderecoId in listEndereco)
             {
-                const string sql_delete_endereco = @"DELETE FROM dbo.Enderecos WHERE EnderecoId = @EnderecoId";
+                const string sql_delete_endereco = @"DELETE FROM Enderecos WHERE EnderecoId = @EnderecoId";
                 await _connection.ExecuteScalarAsync<int>(sql_delete_endereco, new { enderecoId }, commandType: CommandType.Text);
             }
 
-            const string sql_responsavelId = @"SELECT ResponsavelId FROM dbo.Responsaveis WHERE PacienteId = @PacienteId";
+            const string sql_responsavelId = @"SELECT ResponsavelId FROM Responsaveis WHERE PacienteId = @PacienteId";
 
 
             var listaresponsavelId = await _connection.QueryAsync<int>(sql_responsavelId, new { pacienteId }, commandType: CommandType.Text);
@@ -727,36 +727,36 @@ namespace DevFM.SqlServerAdapter
             foreach (var responsavel_Id in listaresponsavelId)
             {
 
-                const string sql_responsavel_telefone_Id = @"SELECT TelefoneId  FROM dbo.Responsavel_Telefones WHERE ResponsavelId = @responsavel_Id";
+                const string sql_responsavel_telefone_Id = @"SELECT TelefoneId  FROM Responsavel_Telefones WHERE ResponsavelId = @responsavel_Id";
 
 
                 var listresponsavel_telefonesId = await _connection.QueryAsync<int>(sql_responsavel_telefone_Id, new { responsavel_Id }, commandType: CommandType.Text);
 
 
-                const string sql_delete_responsavel_telefone = @"DELETE FROM dbo.Responsavel_Telefones WHERE ResponsavelId = @responsavel_Id";
+                const string sql_delete_responsavel_telefone = @"DELETE FROM Responsavel_Telefones WHERE ResponsavelId = @responsavel_Id";
 
                 await _connection.ExecuteScalarAsync<int>(sql_delete_responsavel_telefone, new { responsavel_Id }, commandType: CommandType.Text);
 
                 foreach (var endereco_telefone_Id in listresponsavel_telefonesId)
                 {
-                    const string sql_delete_telefone_responsavel = @"DELETE FROM dbo.Telefones WHERE TelefoneId = @endereco_telefone_Id";
+                    const string sql_delete_telefone_responsavel = @"DELETE FROM Telefones WHERE TelefoneId = @endereco_telefone_Id";
                     await _connection.ExecuteScalarAsync<int>(sql_delete_telefone_responsavel, new { endereco_telefone_Id }, commandType: CommandType.Text);
                 }
 
-                const string sql_delete_responsavel = @"DELETE FROM dbo.Responsaveis WHERE ResponsavelId = @responsavel_Id";
+                const string sql_delete_responsavel = @"DELETE FROM Responsaveis WHERE ResponsavelId = @responsavel_Id";
                 await _connection.ExecuteScalarAsync<int>(sql_delete_responsavel, new { responsavel_Id }, commandType: CommandType.Text);
             }
 
 
-            const string sql_delete_paciente_pacote = @"DELETE FROM dbo.Paciente_Pacotes WHERE PacienteId = @PacienteId";
+            const string sql_delete_paciente_pacote = @"DELETE FROM Paciente_Pacotes WHERE PacienteId = @PacienteId";
 
             var paciente_pacote_id = await _connection.ExecuteScalarAsync<int>(sql_delete_paciente_pacote, new { pacienteId }, commandType: CommandType.Text);
 
-            const string sql_delete_atendimento = @"DELETE FROM dbo.Atendimentos WHERE PacienteId = @PacienteId";
+            const string sql_delete_atendimento = @"DELETE FROM Atendimentos WHERE PacienteId = @PacienteId";
 
             var paciente_atendiemento_id = await _connection.ExecuteScalarAsync<int>(sql_delete_atendimento, new { pacienteId }, commandType: CommandType.Text);
 
-            const string sql_delete_paciente = @"DELETE FROM dbo.Pacientes WHERE PacienteId = @PacienteId";
+            const string sql_delete_paciente = @"DELETE FROM Pacientes WHERE PacienteId = @PacienteId";
 
 
              await _connection.QueryAsync<int>(sql_delete_paciente, new { pacienteId }, commandType: CommandType.Text);

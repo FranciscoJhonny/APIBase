@@ -24,23 +24,23 @@ namespace DevFM.SqlServerAdapter
 
         public async Task<IEnumerable<EstadoCivil>> ObterEstadoCivilAsync()
         {
-            const string sql = @"SELECT [EstadoCivilId]
-                                       ,[DescricaoEstadoCivil]
-                                       ,[DataCriacao]
-                                       ,[DataAlteracao]
-                                   FROM [dbo].[EstadoCivis]";
+            const string sql = @"SELECT EstadoCivilId
+                                       ,DescricaoEstadoCivil
+                                       ,DataCriacao
+                                       ,DataAlteracao
+                                   FROM EstadoCivis";
 
             return await _connection.QueryAsync<EstadoCivil>(sql, commandType: CommandType.Text);
         }
 
         public async Task<EstadoCivil> ObterEstadoCivilPorIdAsync(int EstadoCivilId)
         {
-            const string sql = @"SELECT [EstadoCivilId]
-                                       ,[DescricaoEstadoCivil]
-                                       ,[DataCriacao]
-                                       ,[DataAlteracao]
-                                   FROM [dbo].[EstadoCivis]
-                                WHERE [EstadoCivilId] = @EstadoCivilId";
+            const string sql = @"SELECT EstadoCivilId
+                                       ,DescricaoEstadoCivil
+                                       ,DataCriacao
+                                       ,DataAlteracao
+                                   FROM EstadoCivis
+                                WHERE EstadoCivilId = @EstadoCivilId";
 
             return await _connection.QueryFirstOrDefaultAsync<EstadoCivil>(sql, new { EstadoCivilId }, commandType: CommandType.Text);
         }

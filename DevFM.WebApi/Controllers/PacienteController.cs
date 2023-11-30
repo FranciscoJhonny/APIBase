@@ -26,7 +26,7 @@ namespace DevFM.WebApi.Controllers
             _logger = loggerFactory?.CreateLogger<PacienteController>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _pacienteService = PacienteService ?? throw new ArgumentNullException(nameof(PacienteService));
         }
-        [HttpGet("paciente/get-lista-paciente")]
+        [HttpGet("get-lista-paciente")]
         [ProducesResponseType(typeof(PacienteDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -49,7 +49,7 @@ namespace DevFM.WebApi.Controllers
                 throw ex;
             }
         }
-        [HttpGet("paciente/get-lista-paciente-nome")]
+        [HttpGet("get-lista-paciente-nome")]
         [ProducesResponseType(typeof(PacienteDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -74,7 +74,7 @@ namespace DevFM.WebApi.Controllers
         }
 
         //[Authorize(Roles = "Adminstrador")]
-        [HttpGet("paciente/get-paciente/{pacienteId}")]
+        [HttpGet("get-paciente/{pacienteId}")]
         [ActionName(nameof(GetPacientePorIdAsync))]
         [ProducesResponseType(typeof(PacienteDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -138,7 +138,7 @@ namespace DevFM.WebApi.Controllers
                 throw ex;
             }
         }
-        [HttpGet("paciente/get-lista-paciente-mapa")]
+        [HttpGet("get-lista-paciente-mapa")]
         [ProducesResponseType(typeof(PacienteDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -214,7 +214,7 @@ namespace DevFM.WebApi.Controllers
         }
 
         //[Authorize(Roles = "Adminstrador")]
-        [HttpPost("paciente/post-paciente")]
+        [HttpPost("post-paciente")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -232,7 +232,7 @@ namespace DevFM.WebApi.Controllers
         }
 
         //[Authorize(Roles = "Adminstrador")]
-        [HttpPut("paciente/put-paciente")]
+        [HttpPut("put-paciente")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -255,7 +255,7 @@ namespace DevFM.WebApi.Controllers
         /// <param name="pacienteId"></param>
         /// <returns></returns>
         //[Authorize(Roles = "Adminstrador")]        
-        [HttpDelete("paciente/delete-paciente/{pacienteId}")]
+        [HttpDelete("delete-paciente/{pacienteId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

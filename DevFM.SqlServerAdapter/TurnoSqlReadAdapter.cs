@@ -24,23 +24,23 @@ namespace DevFM.SqlServerAdapter
 
         public async Task<IEnumerable<Turno>> ObterTurnoAsync()
         {
-            const string sql = @"SELECT [TurnoId]
-                                       ,[DescricaoTurno]
-                                       ,[DataCriacao]
-                                       ,[DataAlteracao]
-                                   FROM [dbo].[Turnos]";
+            const string sql = @"SELECT TurnoId
+                                       ,DescricaoTurno
+                                       ,DataCriacao
+                                       ,DataAlteracao
+                                   FROM Turnos";
 
             return await _connection.QueryAsync<Turno>(sql, commandType: CommandType.Text);
         }
 
         public async Task<Turno> ObterTurnoPorIdAsync(int TurnoId)
         {
-            const string sql = @"SELECT [TurnoId]
-                                       ,[DescricaoTurno]
-                                       ,[DataCriacao]
-                                       ,[DataAlteracao]
-                                   FROM [dbo].[Turnos]
-                                WHERE [TurnoId] = @TurnoId";
+            const string sql = @"SELECT TurnoId
+                                       ,DescricaoTurno
+                                       ,DataCriacao
+                                       ,DataAlteracao
+                                   FROM Turnos
+                                WHERE TurnoId = @TurnoId";
 
             return await _connection.QueryFirstOrDefaultAsync<Turno>(sql, new { TurnoId }, commandType: CommandType.Text);
         }

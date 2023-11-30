@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DevFM.Application.Services;
 using DevFM.Domain.Models;
 using DevFM.Domain.Services;
 using DevFM.WebApi.Dtos;
@@ -24,7 +25,8 @@ namespace DevFM.WebApi.Controllers
             _logger = loggerFactory?.CreateLogger<UsuarioController>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _usuarioService = UsuarioService ?? throw new ArgumentNullException(nameof(UsuarioService));
         }
-        [HttpGet("usuario/get-lista-usuario")]
+        [Authorize(Roles = "Adminstrador")]
+        [HttpGet("get-lista-usuario")]
         [ProducesResponseType(typeof(UsuarioDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -47,7 +49,8 @@ namespace DevFM.WebApi.Controllers
                 throw ex;
             }
         }
-        [HttpGet("usuario/get-usuario/usuarioId")]
+        [Authorize(Roles = "Adminstrador")]
+        [HttpGet("get-usuario/usuarioId")]
         [ActionName(nameof(GetUsuarioPorIdAsync))]
         [ProducesResponseType(typeof(UsuarioDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -72,8 +75,8 @@ namespace DevFM.WebApi.Controllers
             }
         }
 
-        //[Authorize(Roles = "Adminstrador")]
-        [HttpPost("usuario/post-Usuario")]
+        [Authorize(Roles = "Adminstrador")]
+        [HttpPost("post-usuario")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -91,12 +94,34 @@ namespace DevFM.WebApi.Controllers
         }
 
         /// <summary>
+        /// Editar usuario
+        /// </summary>
+        /// <param name="usuarioDto">Parametro do usuario</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        [Authorize(Roles = "Adminstrador")]
+        [HttpPut("put-usuario")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> PutUsuario([FromBody] UsuarioPutDto usuarioDto)
+        {
+            if (usuarioDto is null)
+                throw new ArgumentNullException(nameof(usuarioDto));
+
+            var usuario = _mapper.Map<Usuario>(usuarioDto);
+
+            await _usuarioService.UpdateUsuario(usuario);
+
+            return Ok();
+        }
+        /// <summary>
         /// Efetua o login do usuário 
         /// </summary>
         /// <param name="loginUsuario">Parametro do aluno</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        //[Authorize(Roles = "Adminstrador")]
+        [Authorize(Roles = "Adminstrador")]
         [HttpPost("usuario/login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -115,8 +140,8 @@ namespace DevFM.WebApi.Controllers
 
         }
 
-
-        [HttpGet("usuario/get-verifica-usuario")]
+        [Authorize(Roles = "Adminstrador")]
+        [HttpGet("get-verifica-usuario")]
         [ProducesResponseType(typeof(UsuarioDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

@@ -25,7 +25,7 @@ namespace DevFM.WebApi.Controllers
             _logger = loggerFactory?.CreateLogger<PacoteController>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _pacoteService = pacoteService ?? throw new ArgumentNullException(nameof(pacoteService));
         }
-        [HttpGet("pacote/get-lista-pacote")]
+        [HttpGet("get-lista-pacote")]
         [ProducesResponseType(typeof(PacoteDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -50,7 +50,7 @@ namespace DevFM.WebApi.Controllers
         }
 
         //[Authorize(Roles = "Adminstrador")]
-        [HttpGet("pacote/get-Pacote/pacoteId")]
+        [HttpGet("get-Pacote/pacoteId")]
         [ActionName(nameof(GetPacotePorIdAsync))]
         [ProducesResponseType(typeof(PacoteDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -76,7 +76,7 @@ namespace DevFM.WebApi.Controllers
         }
 
         //[Authorize(Roles = "Adminstrador")]
-        [HttpPost("pacote/post-pacote")]        
+        [HttpPost("post-pacote")]        
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType( StatusCodes.Status500InternalServerError)]
@@ -100,7 +100,7 @@ namespace DevFM.WebApi.Controllers
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         //[Authorize(Roles = "Adminstrador")]
-        [HttpPut("pacote/put-pacote")]
+        [HttpPut("put-pacote")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType( StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

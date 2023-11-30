@@ -23,18 +23,16 @@ namespace DevFM.SqlServerAdapter
         }
         public async Task<IEnumerable<Usuario>> ObterUsuarioAsync()
         {
-            const string sql = @"SELECT UsuarioId ,
-                                        Nome ,
-                                        Email ,
-                                        PerfilId ,
-                                        Ativo ,
-                                        DataInclusao ,
-                                        DataOperacao ,
-                                        Senha ,
-                                        TokenRecuperacaoSenha ,
-                                        DataRecuperacaoSenha FROM dbo.Usuario";
+            const string sql = @"SELECT * FROM dbo.Usuario u JOIN dbo.Perfil p ON p.PerfilId = u.PerfilId;";
 
-            return await _connection.QueryAsync<Usuario>(sql, commandType: CommandType.Text);
+            var retorno = await _connection.QueryAsync<Usuario, Perfil, Usuario>(sql,
+                (usuario, perfil) =>
+                {
+                    if (perfil is not null) usuario.Perfil = perfil;
+                    return usuario;
+                }, splitOn: "PerfilId", commandType: CommandType.Text);
+          
+            return retorno;
         }
         public async Task<Usuario> ObterUsuarioPorIdAsync(int usuarioId)
         {
@@ -47,24 +45,24 @@ namespace DevFM.SqlServerAdapter
                                         DataOperacao ,
                                         Senha ,
                                         TokenRecuperacaoSenha ,
-                                        DataRecuperacaoSenha FROM dbo.Usuario
-                                WHERE [UsuarioId] = @usuarioId";
+                                        DataRecuperacaoSenha FROM Usuario
+                                WHERE UsuarioId = @usuarioId";
 
             return await _connection.QueryFirstOrDefaultAsync<Usuario>(sql, new { usuarioId }, commandType: CommandType.Text);
         }
 
         public async Task<int> NewUsuarioAsync(Usuario Usuario)
         {
-            const string sql = @"INSERT INTO [dbo].[Usuario]
-                                                   ([Nome]
-                                                   ,[Email]
-                                                   ,[PerfilId]
-                                                   ,[Ativo]
-                                                   ,[DataInclusao]
-                                                   ,[DataOperacao]
-                                                   ,[Senha]
-                                                   ,[TokenRecuperacaoSenha]
-                                                   ,[DataRecuperacaoSenha])
+            const string sql = @"INSERT INTO Usuario
+                                                   (Nome
+                                                   ,Email
+                                                   ,PerfilId
+                                                   ,Ativo
+                                                   ,DataInclusao
+                                                   ,DataOperacao
+                                                   ,Senha
+                                                   ,TokenRecuperacaoSenha
+                                                   ,DataRecuperacaoSenha)
 	                                        	   OUTPUT INSERTED.UsuarioId
                                              VALUES
                                                    (@Nome
@@ -89,7 +87,7 @@ namespace DevFM.SqlServerAdapter
                                         Ativo ,                                        
                                         Senha ,
                                         TokenRecuperacaoSenha ,
-                                        DataRecuperacaoSenha FROM dbo.Usuario
+                                        DataRecuperacaoSenha FROM Usuario
 	                                    WHERE Email = @login
 	                                    AND Senha = @senha";
 
@@ -97,7 +95,7 @@ namespace DevFM.SqlServerAdapter
         }
         public async Task<int> VerificaUsuarioAsync(string email)
         {
-            const string sql = @"SELECT COUNT(UsuarioId)FROM dbo.Usuario WHERE Email = @Email;";
+            const string sql = @"SELECT COUNT(UsuarioId)FROM Usuario WHERE Email = @Email;";
 
             return await _connection.ExecuteScalarAsync<int>(sql, new { email }, commandType: CommandType.Text);
         }
@@ -108,9 +106,31 @@ namespace DevFM.SqlServerAdapter
                                         Descricao ,
                                         Ativo ,
                                         DataInclusao ,
-                                        DataOperacao FROM dbo.Perfil WHERE PerfilId = @perfioId";
+                                        DataOperacao FROM Perfil WHERE PerfilId = @perfioId";
 
             return await _connection.QueryFirstOrDefaultAsync<Perfil>(sql, new { perfioId }, commandType: CommandType.Text);
+        }
+
+        public async Task<int> UpdateUsuario(Usuario Usuario)
+        {
+            const string sql = @"UPDATE [dbo].[Usuario]
+                                      SET [Nome] = @Nome
+                                         ,[Email] = @Email
+                                         ,[PerfilId] = @PerfilId
+                                         ,[Ativo] = @Ativo      
+                                         ,[DataOperacao] = GETDATE()
+                                         ,[Senha] = @Senha
+                                    WHERE UsuarioId = @UsuarioId";
+
+            return await _connection.ExecuteScalarAsync<int>(sql, Usuario, commandType: CommandType.Text); ;
+        }
+        public async Task<bool> DeleteUsuarioPorIdAsync(int usuarioId)
+        {
+            const string sql = @"UPDATE [dbo].[Usuario]
+                                      SET [Ativo] = false 
+                                    WHERE UsuarioId = @UsuarioId";
+            
+            return await _connection.ExecuteScalarAsync<bool>(sql, usuarioId, commandType: CommandType.Text); ;
         }
     }
 }

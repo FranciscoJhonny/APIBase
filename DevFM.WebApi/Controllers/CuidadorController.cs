@@ -23,8 +23,8 @@ namespace DevFM.WebApi.Controllers
             _logger = loggerFactory?.CreateLogger<CuidadorController>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _cuidadorService = cuidadorService ?? throw new ArgumentNullException(nameof(cuidadorService));
         }
-        //[Authorize]
-        [HttpGet("cuidador/get-lista-cuidador")]
+        [Authorize(Roles = "Adminstrador")]
+        [HttpGet("get-lista-cuidador")]
         [ProducesResponseType(typeof(CuidadorDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -47,8 +47,8 @@ namespace DevFM.WebApi.Controllers
                 throw ex;
             }
         }
-
-        [HttpGet("cuidador/get-lista-cuidador-nome")]
+        [Authorize(Roles = "Adminstrador")]
+        [HttpGet("get-lista-cuidador-nome")]
         [ProducesResponseType(typeof(CuidadorDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -82,8 +82,8 @@ namespace DevFM.WebApi.Controllers
             }
         }
 
-        //[Authorize(Roles = "Adminstrador")]
-        [HttpGet("cuidador/get-cuidador/{cuidadorId}")]
+        [Authorize(Roles = "Adminstrador")]
+        [HttpGet("get-cuidador/{cuidadorId}")]
         [ActionName(nameof(GetCuidadorPorIdAsync))]
         [ProducesResponseType(typeof(CuidadorDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -112,8 +112,8 @@ namespace DevFM.WebApi.Controllers
             }
         }
 
-        //[Authorize(Roles = "Adminstrador")]
-        [HttpPost("cuidador/post-cuidador")]
+        [Authorize(Roles = "Adminstrador")]
+        [HttpPost("post-cuidador")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -136,8 +136,8 @@ namespace DevFM.WebApi.Controllers
         /// <param name="cuidadorDto">Parametro do cuidador</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        //[Authorize(Roles = "Adminstrador")]
-        [HttpPut("cuidador/put-cuidador")]
+        [Authorize(Roles = "Adminstrador")]
+        [HttpPut("put-cuidador")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -159,8 +159,8 @@ namespace DevFM.WebApi.Controllers
         /// <param name="cuidadorDto">Parametro do cuidador</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        //[Authorize(Roles = "Adminstrador")]        
-        [HttpDelete("cuidador/delete-cuidador/{cuidadorId}")]
+        [Authorize(Roles = "Adminstrador")]        
+        [HttpDelete("delete-cuidador/{cuidadorId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

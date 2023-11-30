@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,7 @@ namespace DevFM.SqlServerAdapter
             {
                 if (dbConnection == null)
                     dbConnection = new SqlConnection(connectionString);
+                //dbConnection = new MySqlConnection(connectionString);
 
                 return dbConnection;
             }
