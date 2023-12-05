@@ -3,6 +3,8 @@ using DevFM.Domain.Models;
 using DevFM.Domain.Services;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -76,6 +78,10 @@ namespace DevFM.Application.Services
         {
             return await _pacienteSqlAdapter.DeletePacientePorIdAsync(pacienteId);
         }
-        
+        public async Task<bool> VerificaPacienteAsync(string nomePaciente)
+        {
+            return await _pacienteSqlAdapter.VerificaPacienteAsync(nomePaciente);
+        }
+
     }
 }

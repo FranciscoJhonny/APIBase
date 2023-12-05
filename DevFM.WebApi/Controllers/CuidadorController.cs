@@ -177,5 +177,23 @@ namespace DevFM.WebApi.Controllers
 
             return Ok(result);
         }
+        /// <summary>
+        /// Editar cuidador
+        /// </summary>
+        /// <param name="cuidadorDto">Parametro do cuidador</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        //[Authorize(Roles = "Adminstrador")]
+        [HttpGet("verifica-cuidador")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> VerificaCuidador(string nomeCuidador)
+        {
+           
+            var result = await _cuidadorService.VerificaCuidadorAsync(nomeCuidador);
+
+            return Ok(result);
+        }
     }
 }

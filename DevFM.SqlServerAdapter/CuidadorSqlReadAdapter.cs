@@ -43,9 +43,8 @@ namespace DevFM.SqlServerAdapter
                 return groupedMSAluno;
             });
 
-            return result;
+            return result.OrderBy(x=>x.NomeCuidador);
         }
-
         public async Task<IEnumerable<Cuidador>> ObterComMSMatriculaAlunoTurmaAsync()
         {
             const string sql = @"SELECT * FROM Pacientes p
@@ -61,13 +60,6 @@ namespace DevFM.SqlServerAdapter
 
             return retorno;
         }
-
-
-
-
-
-
-
         public async Task<IEnumerable<Cuidador>> ObterCuidadorNomeAsync(int filtro, string nome)
         {
             const string sql = @"SELECT  CuidadorId ,
@@ -104,7 +96,6 @@ namespace DevFM.SqlServerAdapter
 
             return await _connection.QueryFirstOrDefaultAsync<Cuidador>(sql, new { cuidadorId }, commandType: CommandType.Text);
         }
-
         public async Task<int> NewCuidadorAsync(Cuidador cuidador)
         {
             const string sql = @"INSERT Cuidadores
@@ -152,7 +143,6 @@ namespace DevFM.SqlServerAdapter
             }
             return cuidadorId;
         }
-
         public async Task<int> UpdateCuidador(Cuidador cuidador)
         {
             const string sql = @"UPDATE Cuidadores
@@ -211,7 +201,6 @@ namespace DevFM.SqlServerAdapter
             }
             return id;
         }
-
         public async Task<bool> DeleteCuidadorPorIdAsync(int cuidadorId)
         {
             
@@ -235,6 +224,16 @@ namespace DevFM.SqlServerAdapter
                 const string sql_delete_telefone = @"DELETE FROM Telefones WHERE TelefoneId = @TelefoneId";
                 await _connection.ExecuteScalarAsync<int>(sql_delete_telefone, new { telefoneId }, commandType: CommandType.Text);
             }
+            return true;
+        }
+        public async Task<bool> VerificaCuidadorAsync(string nomeCuidador)
+        {
+            const string sql = @"SELECT COUNT(a.NomeCuidador)
+                                    FROM Cuidadores AS a  
+                                    WHERE EXISTS  
+                                    (SELECT a.NomeCuidador FROM Cuidadores AS b WHERE a.CuidadorId = b.CuidadorId AND replace(a.NomeCuidador, ' ', '') = replace(@NomeCuidador, ' ', ''));	";
+            var qtd = await _connection.ExecuteScalarAsync<int>(sql, new { nomeCuidador }, commandType: CommandType.Text);
+            if (qtd == 0) return false;
             return true;
         }
     }

@@ -42,7 +42,7 @@ namespace DevFM.SqlServerAdapter
                 return groupedPaciente;
             });
 
-            return result;
+            return result.OrderBy(x=> x.NomePaciente);
         }
         public async Task<IEnumerable<Paciente>> ObterPacienteParametroAsync(int filtro, string nome)
         {
@@ -179,7 +179,6 @@ namespace DevFM.SqlServerAdapter
 
             return await _connection.QueryAsync<Paciente_Pacote>(sql, new { pacienteId }, commandType: CommandType.Text);
         }
-
         public async Task<int> NewPacienteAsync(Paciente paciente)
         {
             const string sql = @"INSERT INTO Pacientes
@@ -400,7 +399,6 @@ namespace DevFM.SqlServerAdapter
 
             return pacienteId;
         }
-
         public async Task<int> UpdatePaciente(Paciente paciente)
         {
 
@@ -680,9 +678,6 @@ namespace DevFM.SqlServerAdapter
 
             return paciente.PacienteId;
         }
-
-
-
         public async Task<bool> DeletePacientePorIdAsync(int pacienteId)
         {
            
@@ -763,6 +758,16 @@ namespace DevFM.SqlServerAdapter
 
             return true;
 
+        }
+        public async Task<bool> VerificaPacienteAsync(string nomePaciente)
+        {
+            const string sql = @"SELECT COUNT(a.NomePaciente)
+                                    FROM Pacientes AS a  
+                                    WHERE EXISTS  
+                                    (SELECT a.NomePaciente FROM Pacientes AS b WHERE a.PacienteId = b.PacienteId AND replace(a.NomePaciente, ' ', '') = replace(@NomePaciente, ' ', ''));";
+            var qtd = await _connection.ExecuteScalarAsync<int>(sql, new { nomePaciente }, commandType: CommandType.Text);
+            if (qtd == 0) return false;
+            return true;
         }
     }
 }

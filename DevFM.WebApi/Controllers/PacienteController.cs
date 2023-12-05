@@ -272,5 +272,22 @@ namespace DevFM.WebApi.Controllers
 
             return Ok(result);
         }
+        /// <summary>
+        /// Verifica se exite paciente paciente
+        /// </summary>
+        /// <param name="nomePaciente"></param>
+        /// <returns></returns>
+        //[Authorize(Roles = "Adminstrador")]        
+        [HttpGet("verifica-paciente")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> VerificaPacienteAsync(string nomePaciente)
+        {          
+
+            var result = await _pacienteService.VerificaPacienteAsync(nomePaciente);
+
+            return Ok(result);
+        }
     }
 }

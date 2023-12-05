@@ -52,6 +52,10 @@ namespace DevFM.Application.Services
         {
             return await _cuidadorSqlAdapter.DeleteCuidadorPorIdAsync(cuidadorId);
         }
+        public async Task<bool> VerificaCuidadorAsync(string nomeCuidador)
+        {
+            return await _cuidadorSqlAdapter.VerificaCuidadorAsync(nomeCuidador);
+        }
 
     }
 }

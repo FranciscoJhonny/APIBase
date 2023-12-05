@@ -23,7 +23,7 @@ namespace DevFM.SqlServerAdapter
         }
         public async Task<IEnumerable<Usuario>> ObterUsuarioAsync()
         {
-            const string sql = @"SELECT * FROM dbo.Usuario u JOIN dbo.Perfil p ON p.PerfilId = u.PerfilId;";
+            const string sql = @"SELECT * FROM dbo.Usuario u JOIN dbo.Perfil p ON p.PerfilId = u.PerfilId WHERE u.UsuarioId != 1;";
 
             var retorno = await _connection.QueryAsync<Usuario, Perfil, Usuario>(sql,
                 (usuario, perfil) =>
@@ -50,7 +50,6 @@ namespace DevFM.SqlServerAdapter
 
             return await _connection.QueryFirstOrDefaultAsync<Usuario>(sql, new { usuarioId }, commandType: CommandType.Text);
         }
-
         public async Task<int> NewUsuarioAsync(Usuario Usuario)
         {
             const string sql = @"INSERT INTO Usuario
@@ -77,7 +76,6 @@ namespace DevFM.SqlServerAdapter
 
             return await _connection.ExecuteScalarAsync<int>(sql, Usuario, commandType: CommandType.Text); ;
         }
-
         public async Task<Usuario> ObterPorUsuarioSenhaAsync(string login, string senha)
         {
             const string sql = @"SELECT UsuarioId ,
@@ -100,7 +98,6 @@ namespace DevFM.SqlServerAdapter
 
             return await _connection.ExecuteScalarAsync<int>(sql, new { email }, commandType: CommandType.Text);
         }
-
         public async Task<Perfil> ObterPerfioPorIdAsync(int perfioId)
         {
             const string sql = @"SELECT PerfilId ,
@@ -111,7 +108,6 @@ namespace DevFM.SqlServerAdapter
 
             return await _connection.QueryFirstOrDefaultAsync<Perfil>(sql, new { perfioId }, commandType: CommandType.Text);
         }
-
         public async Task<int> UpdateUsuario(Usuario Usuario)
         {
             const string sql = @"UPDATE [dbo].[Usuario]

@@ -17,5 +17,6 @@ namespace DevFM.Domain.Services
         Task<IEnumerable<Paciente_Pacote>> ObterPaciente_PacoteAsync(int pacienteId);
         Task<int> UpdatePaciente(Paciente paciente);
         Task<bool> DeletePacientePorIdAsync(int pacienteId);
+        Task<bool> VerificaPacienteAsync(string nomePaciente);
     }
 }
