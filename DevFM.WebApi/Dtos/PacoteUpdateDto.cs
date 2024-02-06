@@ -3,7 +3,8 @@
     public class PacoteUpdateDto
     {
         public int PacoteId { get; set; }
-        public string Descricao_Pacote { get; set; }
-        public decimal Valor_Pacote { get; set; }
+        public string DescricaoPacote { get; set; }
+        public decimal ValorPacote { get; set; }
+        public bool Ativo {  get; set; }
     }
 }

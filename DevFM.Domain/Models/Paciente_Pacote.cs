@@ -13,6 +13,7 @@ namespace DevFM.Domain.Models
         public string DescricaoPacoteMensal { get; set; }
         public decimal? PacoteMensal { get; set; } 
         public int? DiaPlantao { get;set; }
+        public decimal? Valor_Pacote { get; set; }
         public decimal? ValorPacote { get; set; }
         public decimal? ValorPlantaoPacote { get; set; }
         public decimal? SalarioCuidador { get; set; }

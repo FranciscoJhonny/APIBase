@@ -163,6 +163,7 @@ namespace DevFM.SqlServerAdapter
                                           pp.PacoteId ,
                                    	      p.Descricao_Pacote AS DescricaoPacoteMensal,
                                           pp.PacoteMensal ,
+                                          p.Valor_Pacote ,
                                           pp.ValorPacote ,
                                           pp.DiaPlantao ,
                                           pp.ValorPlantaoPacote ,

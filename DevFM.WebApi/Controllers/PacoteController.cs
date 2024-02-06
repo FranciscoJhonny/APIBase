@@ -50,7 +50,7 @@ namespace DevFM.WebApi.Controllers
         }
 
         //[Authorize(Roles = "Adminstrador")]
-        [HttpGet("get-Pacote/pacoteId")]
+        [HttpGet("get-pacote/{pacoteId}")]
         [ActionName(nameof(GetPacotePorIdAsync))]
         [ProducesResponseType(typeof(PacoteDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

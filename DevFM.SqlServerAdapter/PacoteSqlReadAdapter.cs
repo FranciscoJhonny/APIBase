@@ -70,8 +70,8 @@ namespace DevFM.SqlServerAdapter
         public async Task<int> UpdatePacote(Pacote pacote)
         {
             const string sql = @"UPDATE Pacotes
-                                          SET Descricao_Pacote = @Descricao_Pacote
-                                             ,Valor_Pacote = @Valor_Pacote
+                                          SET Descricao_Pacote = @DescricaoPacote
+                                             ,Valor_Pacote = @ValorPacote
                                              ,DataAlteracao = GETDATE()
                                              ,Ativo = @Ativo
                                   WHERE PacoteId = @PacoteId";
